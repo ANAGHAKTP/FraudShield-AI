@@ -29,6 +29,6 @@ def predict(data: Transaction):
     probability = model.predict_proba(features)[0][1]
 
     return {
-        "fraud_prediction": int(prediction),
-        "fraud_probability": float(probability)
+        "fraud_probability": float(probability),
+        "label": "fraud" if prediction == 1 else "legitimate"
     }
