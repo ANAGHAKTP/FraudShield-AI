@@ -1,14 +1,34 @@
 from fastapi import FastAPI
-from app.api import predict
+import pickle
+import numpy as np
+import pandas as pd
+from pydantic import BaseModel
 
-app = FastAPI(
-    title="FraudShield AI - ML Backend",
-    description="API for the ML Fraud Detection Backend",
-    version="1.0.0",
-)
+app = FastAPI()
 
-app.include_router(predict.router)
+# Load trained model
+model = pickle.load(open("models/fraud_model.pkl", "rb"))
+
+
+# Request Schema
+class Transaction(BaseModel):
+    features: list
+
 
 @app.get("/")
-def read_root():
-    return {"message": "Welcome to FraudShield AI ML Backend API"}
+def home():
+    return {"message": "Fraud Detection API Running"}
+
+
+@app.post("/predict")
+def predict(data: Transaction):
+
+    features = np.array(data.features).reshape(1, -1)
+
+    prediction = model.predict(features)[0]
+    probability = model.predict_proba(features)[0][1]
+
+    return {
+        "fraud_prediction": int(prediction),
+        "fraud_probability": float(probability)
+    }

@@ -1,0 +1,23 @@
+﻿Warning: Dataset not found at data/creditcard.csv.
+Generating a dummy dataset for testing because data/creditcard.csv was not found.
+Dataset Shape: (10000, 31)
+Class Distribution: 
+Class
+0    0.9908
+1    0.0092
+Name: proportion, dtype: float64
+Building model pipeline...
+Training model...
+Evaluating model...
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      1.00      1982
+           1       0.00      0.00      0.00        18
+
+    accuracy                           0.99      2000
+   macro avg       0.50      0.50      0.50      2000
+weighted avg       0.98      0.99      0.99      2000
+
+Saving model pipeline to app/models\fraud_model.pkl...
+Model saved successfully!

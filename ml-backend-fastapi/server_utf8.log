@@ -1,0 +1,395 @@
+﻿python : C:\Users\user\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\sklearn\bas
+e.py:463: InconsistentV
+ersionWarning: Trying 
+to unpickle estimator 
+DecisionTreeClassifier 
+from version 1.6.1 
+when using version 
+1.8.0. This might lead 
+to breaking code or 
+invalid results. Use 
+at your own risk. For 
+more info please refer 
+to:
+At line:1 char:1
++ python -m uvicorn 
+app.main:app > 
+server.log 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (C:\Users\user   
+ \A...lease refer t    
+o::String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+https://scikit-learn.or
+g/stable/model_persiste
+nce.html#security-maint
+ainability-limitations
+  warnings.warn(
+C:\Users\user\AppData\L
+ocal\Python\pythoncore-
+3.14-64\Lib\site-packag
+es\sklearn\base.py:463:
+ InconsistentVersionWar
+ning: Trying to 
+unpickle estimator 
+RandomForestClassifier 
+from version 1.6.1 
+when using version 
+1.8.0. This might lead 
+to breaking code or 
+invalid results. Use 
+at your own risk. For 
+more info please refer 
+to:
+https://scikit-learn.or
+g/stable/model_persiste
+nce.html#security-maint
+ainability-limitations
+  warnings.warn(
+INFO:     Started 
+server process [91036]
+INFO:     Waiting for 
+application startup.
+INFO:     Application 
+startup complete.
+INFO:     Uvicorn 
+running on 
+http://127.0.0.1:8000 
+(Press CTRL+C to quit)
+C:\Users\user\AppData\L
+ocal\Python\pythoncore-
+3.14-64\Lib\site-packag
+es\sklearn\utils\valida
+tion.py:2691: 
+UserWarning: X does 
+not have valid feature 
+names, but 
+RandomForestClassifier 
+was fitted with 
+feature names
+  warnings.warn(
+Features length before: 29
+Features length after padding: 30
+Numpy array shape: (1, 30)
+INFO:     127.0.0.1:50587 - "POST /predict HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in 
+ASGI application
+Traceback (most recent 
+call last):
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\uvicorn\prot
+ocols\http\h11_impl.py"
+, line 410, in run_asgi
+    result = await 
+app(  # type: ignore[fu
+nc-returns-value]
+             ^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
+        self.scope, 
+self.receive, self.send
+        ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\uvicorn\midd
+leware\proxy_headers.py
+", line 60, in __call__
+    return await 
+self.app(scope, 
+receive, send)
+           ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\fastapi\appl
+ications.py", line 
+1160, in __call__
+    await super().__cal
+l__(scope, receive, 
+send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\ap
+plications.py", line 
+107, in __call__
+    await self.middlewa
+re_stack(scope, 
+receive, send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\mi
+ddleware\errors.py", 
+line 186, in __call__
+    raise exc
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\mi
+ddleware\errors.py", 
+line 164, in __call__
+    await 
+self.app(scope, 
+receive, _send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\mi
+ddleware\exceptions.py"
+, line 63, in __call__
+    await wrap_app_hand
+ling_exceptions(self.ap
+p, conn)(scope, 
+receive, send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\_e
+xception_handler.py", 
+line 53, in wrapped_app
+    raise exc
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\_e
+xception_handler.py", 
+line 42, in wrapped_app
+    await app(scope, 
+receive, sender)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\fastapi\midd
+leware\asyncexitstack.p
+y", line 18, in 
+__call__
+    await 
+self.app(scope, 
+receive, send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\ro
+uting.py", line 716, 
+in __call__
+    await self.middlewa
+re_stack(scope, 
+receive, send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\ro
+uting.py", line 736, 
+in app
+    await 
+route.handle(scope, 
+receive, send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\ro
+uting.py", line 290, 
+in handle
+    await 
+self.app(scope, 
+receive, send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\fastapi\rout
+ing.py", line 130, in 
+app
+    await wrap_app_hand
+ling_exceptions(app, 
+request)(scope, 
+receive, send)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\_e
+xception_handler.py", 
+line 53, in wrapped_app
+    raise exc
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\_e
+xception_handler.py", 
+line 42, in wrapped_app
+    await app(scope, 
+receive, sender)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\fastapi\rout
+ing.py", line 116, in 
+app
+    response = await 
+f(request)
+               
+^^^^^^^^^^^^^^^^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\fastapi\rout
+ing.py", line 670, in 
+app
+    raw_response = 
+await 
+run_endpoint_function(
+                   ^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\fastapi\rout
+ing.py", line 326, in 
+run_endpoint_function
+    return await run_in
+_threadpool(dependant.c
+all, **values)
+           ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\starlette\co
+ncurrency.py", line 
+32, in 
+run_in_threadpool
+    return await anyio.
+to_thread.run_sync(func
+)
+           ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\anyio\to_thr
+ead.py", line 63, in 
+run_sync
+    return await get_as
+ync_backend().run_sync_
+in_worker_thread(
+           ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
+        func, args, aba
+ndon_on_cancel=abandon_
+on_cancel, 
+limiter=limiter
+        ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+    )
+    ^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\anyio\_backe
+nds\_asyncio.py", line 
+2502, in run_sync_in_wo
+rker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\anyio\_backe
+nds\_asyncio.py", line 
+986, in run
+    result = 
+context.run(func, 
+*args)
+  File "C:\Users\user\O
+neDrive\Documents\fraud
+shield-ai\ml-backend-fa
+stapi\app\main.py", 
+line 38, in predict
+    prediction = model.
+predict(features)[0]
+                 
+~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\sklearn\ense
+mble\_forest.py", line 
+903, in predict
+    proba = 
+self.predict_proba(X)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\sklearn\ense
+mble\_forest.py", line 
+945, in predict_proba
+    X = self._validate_
+X_predict(X)
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\sklearn\ense
+mble\_forest.py", line 
+637, in 
+_validate_X_predict
+    X = validate_data(
+        self,
+    ...<4 lines>...
+        ensure_all_fini
+te=ensure_all_finite,
+    )
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\sklearn\util
+s\validation.py", line 
+2923, in validate_data
+    _check_n_features(_
+estimator, X, 
+reset=reset)
+    ~~~~~~~~~~~~~~~~~^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "C:\Users\user\A
+ppData\Local\Python\pyt
+honcore-3.14-64\Lib\sit
+e-packages\sklearn\util
+s\validation.py", line 
+2787, in 
+_check_n_features
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: X has 30 
+features, but 
+RandomForestClassifier 
+is expecting 29 
+features as input.
