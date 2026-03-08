@@ -1,11 +1,11 @@
 import os
 import pickle
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 
 # Create a simple dummy dataset and train a model
-X, y = make_classification(n_samples=100, n_features=5, random_state=42)
-model = LogisticRegression()
+X, y = make_classification(n_samples=500, n_features=29, random_state=42)
+model = RandomForestClassifier(n_estimators=50, max_depth=5, random_state=42)
 model.fit(X, y)
 
 # Ensure the directory exists

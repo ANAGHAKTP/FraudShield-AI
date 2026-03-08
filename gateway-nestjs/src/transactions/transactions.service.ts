@@ -60,6 +60,7 @@ export class TransactionsService {
                     transaction_id: txData.id,
                     fraud_probability: predictionResult.fraud_probability,
                     label: predictionResult.label,
+                    top_features: predictionResult.top_features,
                 },
             ]);
 

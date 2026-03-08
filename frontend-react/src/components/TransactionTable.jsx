@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ChartStyles.css';
+import { FraudExplanation } from './FraudExplanation';
 
 export const TransactionTable = ({ transactions }) => {
+    const [expandedTx, setExpandedTx] = useState(null);
 
     // Helper formatters
     const formatCurrency = (amount) => {
@@ -37,20 +39,31 @@ export const TransactionTable = ({ transactions }) => {
                         const prediction = Array.isArray(tx.Predictions) ? tx.Predictions[0] : tx.Predictions;
                         const isFraud = prediction?.label === 'fraud';
 
+                        const isExpanded = expandedTx === tx.id;
+
                         return (
-                            <tr key={tx.id}>
-                                <td>{formatDate(tx.timestamp)}</td>
-                                <td style={{ fontWeight: 500 }}>{tx.merchant}</td>
-                                <td>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>{tx.device} • {tx.location}</span>
-                                </td>
-                                <td>{formatCurrency(tx.amount)}</td>
-                                <td>
-                                    <span className={`badge ${isFraud ? 'danger' : 'safe'}`}>
-                                        {isFraud ? 'Threat Caught' : 'Safe Packet'}
-                                    </span>
-                                </td>
-                            </tr>
+                            <React.Fragment key={tx.id}>
+                                <tr onClick={() => isFraud && setExpandedTx(isExpanded ? null : tx.id)} style={{ cursor: isFraud ? 'pointer' : 'default' }}>
+                                    <td>{formatDate(tx.timestamp)}</td>
+                                    <td style={{ fontWeight: 500 }}>{tx.merchant}</td>
+                                    <td>
+                                        <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>{tx.device} • {tx.location}</span>
+                                    </td>
+                                    <td>{formatCurrency(tx.amount)}</td>
+                                    <td>
+                                        <span className={`badge ${isFraud ? 'danger' : 'safe'}`}>
+                                            {isFraud ? 'Threat Caught' : 'Safe Packet'}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {isExpanded && prediction?.top_features && (
+                                    <tr className="expanded-row">
+                                        <td colSpan="5" style={{ padding: 0 }}>
+                                            <FraudExplanation features={prediction.top_features} txId={tx.id} probability={prediction.fraud_probability} />
+                                        </td>
+                                    </tr>
+                                )}
+                            </React.Fragment>
                         );
                     })}
                     {(!transactions || transactions.length === 0) && (
