@@ -1,0 +1,5 @@
+﻿ad9a522 feat: implement dashboard page with fraud statistics cards, a transaction table, and associated styling.
+99a01b5 feat: Add FraudTrendChart and RiskDistributionChart components for visualizing fraud data.
+41a38ec chore: update frontend dependencies by adding numerous new files to `node_modules`.
+6f3e8e2 Updated prediction route to match Day 5 payload structure
+892b53c Added FastAPI fraud prediction API
