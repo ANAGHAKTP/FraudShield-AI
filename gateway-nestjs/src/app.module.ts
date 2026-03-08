@@ -5,9 +5,10 @@ import { PredictionModule } from './modules/prediction.module';
 import { AuthModule } from './auth/auth.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { AlertsModule } from './alerts/alerts.module';
 
 @Module({
-  imports: [PredictionModule, AuthModule, TransactionsModule, AnalyticsModule],
+  imports: [PredictionModule, AuthModule, TransactionsModule, AnalyticsModule, AlertsModule],
   controllers: [AppController],
   providers: [AppService],
 })

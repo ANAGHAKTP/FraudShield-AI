@@ -1,0 +1,32 @@
+services:
+  gateway:
+    build: 
+      context: ./gateway-nestjs
+      dockerfile: ../docker/nestjs.Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - ML_API_URL=${ML_API_URL:-http://ml-service:8000}
+    env_file:
+      - .env
+
+  ml-service:
+    build: 
+      context: ./ml-backend-fastapi
+      dockerfile: ../docker/fastapi.Dockerfile
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: 
+      context: ./frontend-react
+      dockerfile: ../docker/react.Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
+    env_file:
+      - .env

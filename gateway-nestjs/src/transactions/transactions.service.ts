@@ -69,6 +69,21 @@ export class TransactionsService {
             // but we log the analytics failure.
         }
 
+        // 5. Fire high risk alert if probability > 0.8
+        if (predictionResult.fraud_probability > 0.8) {
+            const { error: alertError } = await supabase
+                .from('alerts')
+                .insert({
+                    transaction_id: txData.id,
+                    probability: predictionResult.fraud_probability,
+                    created_at: new Date()
+                });
+
+            if (alertError) {
+                this.logger.error('Failed to insert fraud alert', alertError);
+            }
+        }
+
         return {
             transaction: txData,
             prediction: predictionResult

@@ -7,6 +7,7 @@ import { FraudTrendChart } from '../components/FraudTrendChart';
 import { RiskDistributionChart } from '../components/RiskDistributionChart';
 import { FraudRateChart } from '../components/FraudRateChart';
 import { TransactionTable } from '../components/TransactionTable';
+import { AlertPanel } from '../components/AlertPanel';
 import './Dashboard.css';
 
 export const Dashboard = () => {
@@ -100,6 +101,8 @@ export const Dashboard = () => {
                         <p>Real-time machine learning threat prevention analysis utilizing day-12 BarChart integrations.</p>
                     </div>
                 </header>
+
+                <AlertPanel />
 
                 {/* Top Metrics Grid */}
                 <div className="metrics-grid">
