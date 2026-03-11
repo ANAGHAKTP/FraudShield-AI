@@ -14,6 +14,14 @@ export class TransactionsController {
         return this.transactionsService.processTransaction(req.user.userId, body);
     }
 
+    @Post('batch')
+    async createBatchTransactions(@Request() req: any, @Body() body: any[]) {
+        if (!Array.isArray(body)) {
+            throw new Error("Payload must be an array of transactions for batch processing");
+        }
+        return this.transactionsService.processBatchTransactions(req.user.userId, body);
+    }
+
     @Get()
     async getUserTransactions(@Request() req: any) {
         return this.transactionsService.getUserTransactions(req.user.userId);

@@ -5,8 +5,8 @@ import { SupabaseModule } from '../supabase.module';
 import { PredictionModule } from '../modules/prediction.module';
 
 @Module({
-    imports: [SupabaseModule, PredictionModule],
-    controllers: [TransactionsController],
-    providers: [TransactionsService]
+  imports: [SupabaseModule, PredictionModule],
+  controllers: [TransactionsController],
+  providers: [TransactionsService],
 })
 export class TransactionsModule { }

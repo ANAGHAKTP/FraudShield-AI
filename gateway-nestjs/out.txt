@@ -1,0 +1,11 @@
+[31m[Nest] 90980  - [39m09/03/2026, 9:41:19 am [31m  ERROR[39m [38;5;3m[ExceptionHandler] [39mError: supabaseUrl is required.
+    at validateSupabaseUrl [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@supabase[24m\supabase-js\dist\index.cjs:146:25[90m)[39m
+    at new SupabaseClient [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@supabase[24m\supabase-js\dist\index.cjs:195:19[90m)[39m
+    at createClient [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@supabase[24m\supabase-js\dist\index.cjs:388:9[90m)[39m
+    at new SupabaseService [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mdist\supabase.service.js:25:56[90m)[39m
+    at Injector.instantiateClass [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@nestjs[24m\core\injector\injector.js:422:19[90m)[39m
+    at callback [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@nestjs[24m\core\injector\injector.js:70:45[90m)[39m
+    at async Injector.resolveConstructorParams [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@nestjs[24m\core\injector\injector.js:170:24[90m)[39m
+    at async Injector.loadInstance [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@nestjs[24m\core\injector\injector.js:75:13[90m)[39m
+    at async Injector.loadProvider [90m(C:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@nestjs[24m\core\injector\injector.js:103:9[90m)[39m
+    at async [90mC:\Users\user\OneDrive\Documents\fraudshield-ai\gateway-nestjs\[39mnode_modules\[4m@nestjs[24m\core\injector\instance-loader.js:56:13

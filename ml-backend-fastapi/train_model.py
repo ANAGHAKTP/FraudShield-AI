@@ -1,12 +1,13 @@
 import pandas as pd
 import numpy as np
 import os
-import pickle
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import classification_report
+from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
+from sklearn.metrics import classification_report, roc_auc_score, precision_recall_curve, auc
 
 def generate_dummy_creditcard_data(n_samples=10000):
     """Generates a dummy dataset that mimics the kaggle credit card fraud dataset."""
@@ -52,7 +53,8 @@ def main():
     # Using a pipeline ensures that our API backend automatically scales the input when prediction occurs!
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
-        ('classifier', RandomForestClassifier(n_estimators=50, max_depth=10, class_weight='balanced', random_state=42, n_jobs=-1))
+        ('smote', SMOTE(random_state=42)),
+        ('classifier', RandomForestClassifier(n_estimators=200, max_depth=10, class_weight='balanced', random_state=42, n_jobs=-1))
     ])
 
     print("Training model...")
@@ -60,19 +62,28 @@ def main():
 
     print("Evaluating model...")
     y_pred = pipeline.predict(X_test)
+    y_probs = pipeline.predict_proba(X_test)[:, 1]
     
     print("Classification Report:")
     print(classification_report(y_test, y_pred))
+
+    roc = roc_auc_score(y_test, y_probs)
+    precision, recall, _ = precision_recall_curve(y_test, y_probs)
+    pr_auc = auc(recall, precision)
+    
+    print(f"ROC AUC: {roc:.4f}")
+    print(f"PR AUC: {pr_auc:.4f}")
 
     model_dir = 'app/models'
     os.makedirs(model_dir, exist_ok=True)
     model_path = os.path.join(model_dir, 'fraud_model.pkl')
     
     print(f"Saving model pipeline to {model_path}...")
-    # Save the pipeline using pickle to be compatible with `fraud_detection.py` and joblib 
-    # since we imported pickle in the backend
-    with open(model_path, 'wb') as f:
-        pickle.dump(pipeline, f)
+    # Save the pipeline and feature columns using joblib 
+    joblib.dump({
+        "model": pipeline,
+        "features": list(X.columns)
+    }, model_path)
         
     print("Model saved successfully!")
 

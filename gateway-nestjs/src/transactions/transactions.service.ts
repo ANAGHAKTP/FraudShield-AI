@@ -60,6 +60,7 @@ export class TransactionsService {
                     transaction_id: txData.id,
                     fraud_probability: predictionResult.fraud_probability,
                     label: predictionResult.label,
+                    risk_level: predictionResult.risk_level,
                     top_features: predictionResult.top_features,
                 },
             ]);
@@ -77,6 +78,7 @@ export class TransactionsService {
                 .insert({
                     transaction_id: txData.id,
                     probability: predictionResult.fraud_probability,
+                    risk_level: predictionResult.risk_level,
                     created_at: new Date()
                 });
 
@@ -88,6 +90,90 @@ export class TransactionsService {
         return {
             transaction: txData,
             prediction: predictionResult
+        };
+    }
+
+    async processBatchTransactions(userId: number, transactions: any[]) {
+        const supabase = this.supabaseService.getClient();
+
+        // 1. Bulk insert transactions
+        const txInserts = transactions.map(tx => ({
+            user_id: userId,
+            amount: tx.amount,
+            merchant: tx.merchant,
+            location: tx.location,
+            device: tx.device,
+        }));
+
+        const { data: txData, error: txError } = await supabase
+            .from('Transactions')
+            .insert(txInserts)
+            .select();
+
+        if (txError) {
+            this.logger.error('Failed to bulk insert transactions', txError);
+            throw new InternalServerErrorException('Database error handling batch transactions');
+        }
+
+        // 2. Mock features for each transaction
+        const batchFeatures = txData.map(tx => [
+            tx.amount, -0.072781, 2.536347, 1.378155, -0.338321, 0.462388,
+            0.239599, 0.098698, 0.363787, 0.090794, -0.5516, -0.6178, -0.9913,
+            -0.3111, 1.4681, -0.4704, 0.2079, 0.0257, 0.4039, 0.2514, -0.0183,
+            0.2778, -0.1104, 0.0669, 0.1285, -0.1891, 0.1335, -0.0210, 0.4967
+        ]);
+
+        // 3. Send features to FastAPI Batch Inference
+        let predictionResults: any[] = [];
+        try {
+            predictionResults = await this.predictionService.predictBatch(batchFeatures);
+        } catch (error) {
+            this.logger.error('Failed to communicate with FastAPI Inference API (Batch)', error);
+            // Optionally, we could clean up the transactions here if ML fails, but we'll leave them.
+            throw new InternalServerErrorException('ML Prediction service unavailable');
+        }
+
+        // 4. Store all predictions
+        const predInserts = predictionResults.map((pred, index) => ({
+            transaction_id: txData[index].id,
+            fraud_probability: pred.fraud_probability,
+            label: pred.label,
+            risk_level: pred.risk_level,
+            top_features: pred.top_features, // Top features will only be null here until SHAP is upgraded for batch loop
+        }));
+
+        const { error: predError } = await supabase
+            .from('Predictions')
+            .insert(predInserts);
+
+        if (predError) {
+            this.logger.error('Failed to bulk insert predictions', predError);
+        }
+
+        // 5. Fire high risk alerts if probability > 0.8
+        const highRiskAlerts = predInserts
+            .filter(pred => pred.fraud_probability > 0.8)
+            .map(pred => ({
+                transaction_id: pred.transaction_id,
+                probability: pred.fraud_probability,
+                risk_level: pred.risk_level,
+                created_at: new Date()
+            }));
+
+        if (highRiskAlerts.length > 0) {
+            const { error: alertError } = await supabase
+                .from('alerts')
+                .insert(highRiskAlerts);
+
+            if (alertError) {
+                this.logger.error('Failed to bulk insert fraud alerts', alertError);
+            }
+        }
+
+        return {
+            inserted_count: txData.length,
+            high_risk_flagged: highRiskAlerts.length,
+            transactions: txData.map((t, idx) => ({ ...t, prediction: predictionResults[idx] }))
         };
     }
 

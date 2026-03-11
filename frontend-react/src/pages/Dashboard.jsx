@@ -5,6 +5,7 @@ import { api } from '../services/api';
 import { FraudStatsCard } from '../components/FraudStatsCard';
 import { FraudTrendChart } from '../components/FraudTrendChart';
 import { RiskDistributionChart } from '../components/RiskDistributionChart';
+import { RiskGaugeCard } from '../components/RiskGaugeCard';
 import { FraudRateChart } from '../components/FraudRateChart';
 import { TransactionTable } from '../components/TransactionTable';
 import { AlertPanel } from '../components/AlertPanel';
@@ -21,6 +22,7 @@ export const Dashboard = () => {
     const [trendData, setTrendData] = useState([]);
     const [highRiskData, setHighRiskData] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [latestPrediction, setLatestPrediction] = useState({ probability: 0, label: 'legitimate' });
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -47,6 +49,16 @@ export const Dashboard = () => {
                 ]);
 
                 setTransactions(txRes.data);
+
+                if (txRes.data.length > 0) {
+                    const latest = txRes.data[0];
+                    if (latest.Predictions && latest.Predictions.length > 0) {
+                        setLatestPrediction({
+                            probability: latest.Predictions[0].fraud_probability,
+                            label: latest.Predictions[0].label
+                        });
+                    }
+                }
 
             } catch (error) {
                 console.error("Dashboard failed to load analytics:", error);
@@ -139,12 +151,15 @@ export const Dashboard = () => {
                     </div>
                 </div>
 
-                <div className="charts-grid" style={{ marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+                <div className="charts-grid" style={{ marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '1.5rem' }}>
                     <div className="main-chart">
                         <FraudTrendChart data={trendData} />
                     </div>
                     <div className="side-chart">
                         <RiskDistributionChart data={highRiskData} />
+                    </div>
+                    <div className="side-chart">
+                        <RiskGaugeCard probability={latestPrediction.probability} label={latestPrediction.label} />
                     </div>
                 </div>
 

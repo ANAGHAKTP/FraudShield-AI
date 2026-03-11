@@ -1,4 +1,5 @@
-import pickle
+import joblib
+import pandas as pd
 import os
 import shap
 
@@ -7,14 +8,17 @@ MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'models', 'fraud_mode
 
 model = None
 explainer = None
+features_list = None
 
 def load_model():
-    global model, explainer
+    global model, explainer, features_list
     if os.path.exists(MODEL_PATH):
-        with open(MODEL_PATH, 'rb') as f:
-            model = pickle.load(f)
-        # Initialize SHAP explainer
-        explainer = shap.TreeExplainer(model)
+        model_data = joblib.load(MODEL_PATH)
+        model = model_data["model"]
+        features_list = model_data["features"]
+        # Initialize SHAP explainer on the random forest classifier part
+        # SHAP requires the actual model, not the pipeline
+        explainer = shap.TreeExplainer(model.named_steps['classifier'])
     else:
         print(f"Warning: Model not found at {MODEL_PATH}")
 
@@ -25,17 +29,21 @@ def predict_fraud(features: list) -> dict:
     if model is None:
         raise Exception("Model could not be loaded")
         
-    # The dummy model expects a 2D array: nsmaples x nfeatures
-    feature_array = [features]
-    prediction = model.predict(feature_array)[0]
+    df_features = pd.DataFrame([features], columns=features_list)
+    prediction = model.predict(df_features)[0]
     
     # Optional: get probability if supported by model
     probability = 0.0
     if hasattr(model, "predict_proba"):
-        probability = float(model.predict_proba(feature_array)[0][1])
+        probability = float(model.predict_proba(df_features)[0][1])
         
     # Calculate SHAP values
-    shap_values = explainer.shap_values(feature_array)
+    # We must transform the DataFrame into scaled features first before giving it to SHAP explainer
+    # We can do this by using the pipeline steps before the classifier.
+    # We don't have access to the exact intermediate step directly without slicing pipeline (scikit-learn >= 1.2 required)
+    # So we apply scaler and explicitly bypass 'smote' because it's only used for training
+    X_transformed = model.named_steps["scaler"].transform(df_features)
+    shap_values = explainer.shap_values(X_transformed)
     
     # Extract feature importance for the single sample
     # Random Forest shap_values produces a list [negative_class_impact, positive_class_impact]

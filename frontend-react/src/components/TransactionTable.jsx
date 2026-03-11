@@ -30,7 +30,8 @@ export const TransactionTable = ({ transactions }) => {
                         <th>Terminal Node</th>
                         <th>Ping Trace</th>
                         <th>Metric Load</th>
-                        <th>Risk Flags</th>
+                        <th>Eval Risk</th>
+                        <th>Alert Flags</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,6 +52,11 @@ export const TransactionTable = ({ transactions }) => {
                                     </td>
                                     <td>{formatCurrency(tx.amount)}</td>
                                     <td>
+                                        <span className={`risk-text ${prediction?.risk_level === 'HIGH' ? 'text-red-500' : prediction?.risk_level === 'MEDIUM' ? 'text-yellow-500' : 'text-green-500'}`} style={{ fontWeight: 'bold' }}>
+                                            {prediction?.risk_level || 'N/A'}
+                                        </span>
+                                    </td>
+                                    <td>
                                         <span className={`badge ${isFraud ? 'danger' : 'safe'}`}>
                                             {isFraud ? 'Threat Caught' : 'Safe Packet'}
                                         </span>
@@ -58,7 +64,7 @@ export const TransactionTable = ({ transactions }) => {
                                 </tr>
                                 {isExpanded && prediction?.top_features && (
                                     <tr className="expanded-row">
-                                        <td colSpan="5" style={{ padding: 0 }}>
+                                        <td colSpan="6" style={{ padding: 0 }}>
                                             <FraudExplanation features={prediction.top_features} txId={tx.id} probability={prediction.fraud_probability} />
                                         </td>
                                     </tr>
@@ -68,7 +74,7 @@ export const TransactionTable = ({ transactions }) => {
                     })}
                     {(!transactions || transactions.length === 0) && (
                         <tr>
-                            <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+                            <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
                                 Awaiting incoming transactional payload streams.
                             </td>
                         </tr>
