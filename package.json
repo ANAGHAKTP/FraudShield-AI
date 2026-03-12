@@ -1,0 +1,21 @@
+{
+  "name": "fraudshield-ai",
+  "version": "1.0.0",
+  "description": "FraudShield AI - run all services locally with a single command",
+  "scripts": {
+    "dev": "concurrently --names \"ML,NEST,REACT\" --prefix-colors \"cyan,yellow,magenta\" \"npm run dev:ml\" \"npm run dev:nest\" \"npm run dev:react\"",
+    "dev:ml": "cd ml-backend-fastapi && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
+    "dev:nest": "cd gateway-nestjs && npm run start:dev",
+    "dev:react": "cd frontend-react && npm run dev",
+    "install:all": "npm install && cd gateway-nestjs && npm install && cd ../frontend-react && npm install --legacy-peer-deps"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "concurrently": "^9.1.2",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1"
+  },
+  "dependencies": {
+    "lucide-react": "^0.577.0"
+  }
+}
