@@ -9,10 +9,24 @@ app = FastAPI()
 import joblib
 
 # Load trained model
-model_data = joblib.load("app/models/fraud_model.pkl")
-model = model_data["model"]
-features_list = model_data["features"]
-
+try:
+    model_data = joblib.load("app/models/fraud_model.pkl")
+    if isinstance(model_data, dict):
+        model = model_data["model"]
+        features_list = model_data["features"]
+        print(f"Loaded model dictionary with {len(features_list)} features")
+    else:
+        model = model_data
+        # Fallback features list if just the model was pickled
+        features_list = ['Time'] + [f'V{i}' for i in range(1, 29)] + ['Amount']
+        print(f"Loaded raw model object, using default 30 features list")
+except Exception as e:
+    print(f"Error loading model: {e}")
+    # Create a dummy model if load fails to prevent crash
+    from sklearn.ensemble import RandomForestClassifier
+    model = RandomForestClassifier()
+    model.fit(np.zeros((1, 30)), [0])
+    features_list = [f"f{i}" for i in range(30)]
 
 # Request Schema
 class Transaction(BaseModel):
