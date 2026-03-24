@@ -8,9 +8,12 @@ app = FastAPI()
 
 import joblib
 
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Load trained model
 try:
-    model_data = joblib.load("app/models/fraud_model.pkl")
+    model_path = os.path.join(BASE_DIR, "models/fraud_model.pkl")
+    model_data = joblib.load(model_path)
     if isinstance(model_data, dict):
         model = model_data["model"]
         features_list = model_data["features"]

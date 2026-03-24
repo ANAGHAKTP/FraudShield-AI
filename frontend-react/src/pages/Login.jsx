@@ -29,36 +29,21 @@ export const Login = () => {
         e.preventDefault();
         setError(null);
         try {
-            const endpoint = mode === 'login' 
-                ? "http://localhost:3000/auth/login" 
-                : "http://localhost:3000/auth/register";
+            const data = { email, password };
+            const response = mode === 'login' 
+                ? await api.post("/auth/login", data)
+                : await api.post("/auth/register", data);
 
-            const response = await fetch(endpoint, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                if (mode === 'login') {
-                    localStorage.setItem("token", data.access_token);
-                    window.location.href = "/dashboard";
-                } else {
-                    alert("Account created successfully. Please login.");
-                    setMode('login');
-                }
+            if (mode === 'login') {
+                localStorage.setItem("token", response.data.access_token);
+                window.location.href = "/dashboard";
             } else {
-                setError(data.message || (mode === 'login' ? 'Login failed.' : 'Registration failed.'));
+                alert("Account created successfully. Please login.");
+                setMode('login');
             }
         } catch (err) {
-            setError('Connection error. Please check if the server is running.');
+            const message = err.response?.data?.message || 'Connection error. Please check if the server is running.';
+            setError(message);
         }
     };
 

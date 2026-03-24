@@ -4,7 +4,7 @@
   "description": "FraudShield AI - run all services locally with a single command",
   "scripts": {
     "dev": "concurrently -n ML,API,FRONTEND -c magenta,green,blue \"npm run dev:ml\" \"npm run dev:api\" \"npm run dev:ui\"",
-    "dev:ml": "cd ml-backend-fastapi && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
+    "dev:ml": "cd ml-backend-fastapi && ./venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
     "dev:api": "cd gateway-nestjs && npm run start:dev",
     "dev:ui": "cd frontend-react && npm run dev",
     "install:all": "npm install && cd gateway-nestjs && npm install && cd ../frontend-react && npm install --legacy-peer-deps"
