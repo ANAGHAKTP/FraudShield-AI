@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 import { 
     ShieldCheck, 
@@ -23,7 +22,7 @@ export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
+    // navigate is unused since we use window.location.href below
 
     const handleSubmit = async (e) => {
         e.preventDefault();
