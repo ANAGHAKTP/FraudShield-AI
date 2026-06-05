@@ -5,11 +5,16 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+    throw new Error('CRITICAL: JWT_SECRET environment variable is not set.');
+}
+
 @Module({
     imports: [
         PassportModule,
         JwtModule.register({
-            secret: 'super-secret-key-change-me', // TODO: Use environment variables
+            secret: jwtSecret,
             signOptions: { expiresIn: '1h' },
         }),
     ],
