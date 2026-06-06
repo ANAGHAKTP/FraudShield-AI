@@ -36,7 +36,7 @@ export const Login = () => {
 
             if (mode === 'login') {
                 localStorage.setItem("token", response.data.access_token);
-                window.location.href = "/dashboard";
+                navigate('/dashboard');
             } else {
                 alert("Account created successfully. Please login.");
                 setMode('login');
@@ -94,10 +94,11 @@ export const Login = () => {
 
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="input-field">
-                        <Mail className="field-icon" size={20} />
+                        <Mail className="field-icon" size={20} aria-hidden="true" />
                         <input
                             type="email"
                             placeholder="Email Address"
+                            aria-label="Email Address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -105,10 +106,11 @@ export const Login = () => {
                     </div>
                     
                     <div className="input-field">
-                        <Lock className="field-icon" size={20} />
+                        <Lock className="field-icon" size={20} aria-hidden="true" />
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
+                            aria-label="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -117,8 +119,9 @@ export const Login = () => {
                             type="button" 
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
                         >
-                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            {showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
                         </button>
                     </div>
 

@@ -1,0 +1,3 @@
+## 2024-05-15 - [Form Accessibility Enhancements]
+**Learning:** Found an accessibility issue pattern specific to this app's components, where inputs without explicit labels and icon-only buttons lacked aria-labels, which causes poor screen reader experiences.
+**Action:** Always add `aria-label` to form inputs when `label` tags aren't visible, add `aria-label` to icon-only interactive elements (like the show/hide password toggle), and hide purely decorative icons with `aria-hidden="true"`.
