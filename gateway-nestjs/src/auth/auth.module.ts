@@ -8,9 +8,17 @@ import { JwtStrategy } from './jwt.strategy';
 @Module({
     imports: [
         PassportModule,
-        JwtModule.register({
-            secret: 'super-secret-key-change-me', // TODO: Use environment variables
-            signOptions: { expiresIn: '1h' },
+        JwtModule.registerAsync({
+            useFactory: () => {
+                const secret = process.env.JWT_SECRET;
+                if (!secret) {
+                    console.warn('CRITICAL WARNING: JWT_SECRET environment variable is missing.');
+                }
+                return {
+                    secret: secret || 'super-secret-key-change-me',
+                    signOptions: { expiresIn: '1h' },
+                };
+            },
         }),
     ],
     controllers: [AuthController],
