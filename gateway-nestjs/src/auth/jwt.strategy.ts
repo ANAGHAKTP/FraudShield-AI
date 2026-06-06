@@ -8,8 +8,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: 'super-secret-key-change-me', // Ensure syncs with auth.module secret
+            secretOrKey: process.env.JWT_SECRET || 'super-secret-key-change-me', // Fallback for dev only. Should fail in prod.
         });
+        if (!process.env.JWT_SECRET) {
+            console.warn('CRITICAL WARNING: JWT_SECRET is not set in JwtStrategy.');
+        }
     }
 
     async validate(payload: any) {
