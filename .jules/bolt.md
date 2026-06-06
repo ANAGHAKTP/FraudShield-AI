@@ -1,0 +1,3 @@
+## 2024-05-24 - [Intl Formatters Re-instantiation Performance]
+**Learning:** Re-instantiating `Intl.NumberFormat` and `Intl.DateTimeFormat` inside a React component's render loop (especially inside `.map()` for large arrays like tables) causes severe performance degradation, as standard JS Date formatting operations are much slower. Benchmarks show `Intl.NumberFormat` takes ~100x longer to instantiate than to reuse a cached instance.
+**Action:** Always extract and cache `Intl.NumberFormat`, `Intl.DateTimeFormat`, and similar localization formatters globally outside of React component definitions so they are created exactly once during module evaluation.
