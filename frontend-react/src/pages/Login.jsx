@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 import { 
     ShieldCheck, 
@@ -23,7 +22,6 @@ export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -98,6 +96,7 @@ export const Login = () => {
                         <input
                             type="email"
                             placeholder="Email Address"
+                            aria-label="Email Address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -109,6 +108,7 @@ export const Login = () => {
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
+                            aria-label="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -117,6 +117,8 @@ export const Login = () => {
                             type="button" 
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                            title={showPassword ? "Hide password" : "Show password"}
                         >
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </button>
