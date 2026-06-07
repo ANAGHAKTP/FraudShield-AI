@@ -24,6 +24,11 @@ export const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [latestPrediction, setLatestPrediction] = useState({ probability: 0, label: 'legitimate' });
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    };
+
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
@@ -73,11 +78,6 @@ export const Dashboard = () => {
         fetchDashboardData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
-    };
 
     if (loading) {
         return (
