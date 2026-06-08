@@ -36,7 +36,7 @@ export const Login = () => {
 
             if (mode === 'login') {
                 localStorage.setItem("token", response.data.access_token);
-                window.location.href = "/dashboard";
+                navigate("/dashboard");
             } else {
                 alert("Account created successfully. Please login.");
                 setMode('login');

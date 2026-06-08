@@ -2,22 +2,28 @@ import React, { useState } from 'react';
 import './ChartStyles.css';
 import { FraudExplanation } from './FraudExplanation';
 
+// Cache expensive Intl formatters outside the component
+// to prevent re-instantiation on every render and for every row
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+});
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+});
+
 export const TransactionTable = ({ transactions }) => {
     const [expandedTx, setExpandedTx] = useState(null);
 
     // Helper formatters
     const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount);
+        return currencyFormatter.format(amount);
     };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-        });
+        return dateFormatter.format(date);
     };
 
     return (
