@@ -32,22 +32,22 @@ export const Dashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const [rateRes, countRes, trendRes, txRes] = await Promise.all([
+                const [rateRes, trendRes, txRes] = await Promise.all([
                     api.get('/analytics/fraud-rate'),
-                    api.get('/analytics/transactions-count'),
+                    // Removed redundant transactions-count call: rateRes contains total_transactions
                     api.get('/analytics/trend'),
                     api.get('/transactions')
                 ]);
 
                 setStats({
-                    transactions: countRes.data.count,
+                    transactions: rateRes.data.total_transactions,
                     fraudRate: (rateRes.data.fraud_rate * 100).toFixed(2),
                     fraudVol: rateRes.data.fraud_transactions
                 });
 
                 setTrendData(trendRes.data);
 
-                const safe = countRes.data.count - rateRes.data.fraud_transactions;
+                const safe = rateRes.data.total_transactions - rateRes.data.fraud_transactions;
                 setHighRiskData([
                     { name: 'Safe Volume', value: safe },
                     { name: 'Fraud Detected', value: rateRes.data.fraud_transactions }
