@@ -12,7 +12,8 @@ import {
     EyeOff, 
     ArrowRight, 
     UserPlus,
-    ChevronRight
+    ChevronRight,
+    Loader2
 } from 'lucide-react';
 import './Login.css';
 
@@ -23,11 +24,13 @@ export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+        setIsLoading(true);
         try {
             const data = { email, password };
             const response = mode === 'login' 
@@ -44,6 +47,8 @@ export const Login = () => {
         } catch (err) {
             const message = err.response?.data?.message || 'Connection error. Please check if the server is running.';
             setError(message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -98,6 +103,7 @@ export const Login = () => {
                         <input
                             type="email"
                             placeholder="Email Address"
+                            aria-label="Email Address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -109,6 +115,7 @@ export const Login = () => {
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
+                            aria-label="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -116,6 +123,7 @@ export const Login = () => {
                         <button 
                             type="button" 
                             className="toggle-password"
+                            aria-label="Toggle password visibility"
                             onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -139,8 +147,16 @@ export const Login = () => {
 
                     {error && <div className="error-message">{error}</div>}
 
-                    <button type="submit" className="login-btn primary-gradient">
-                        {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} />
+                    <button type="submit" className="login-btn primary-gradient" disabled={isLoading}>
+                        {isLoading ? (
+                            <>
+                                <Loader2 size={20} className="spinner" /> Processing...
+                            </>
+                        ) : (
+                            <>
+                                {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} />
+                            </>
+                        )}
                     </button>
                 </form>
 

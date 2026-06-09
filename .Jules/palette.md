@@ -1,0 +1,3 @@
+## 2024-06-09 - Accessible Forms & Async Buttons
+**Learning:** Icon-only interactive elements require `aria-label` attributes for screen reader accessibility, and forms lack explicit context without corresponding `aria-label`s on their inputs. Additionally, providing visual feedback during asynchronous network requests is essential UX to prevent duplicate submissions and inform the user that their request is being processed.
+**Action:** Always add `aria-label`s to visually hidden contexts and include an explicit `isLoading` state (disabling the button and rendering a spinner) for submission forms.
