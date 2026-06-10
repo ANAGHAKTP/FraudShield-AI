@@ -8,8 +8,14 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { AlertsModule } from './alerts/alerts.module';
 
 @Module({
-  imports: [PredictionModule, AuthModule, TransactionsModule, AnalyticsModule, AlertsModule],
+  imports: [
+    PredictionModule,
+    AuthModule,
+    TransactionsModule,
+    AnalyticsModule,
+    AlertsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
