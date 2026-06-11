@@ -12,7 +12,8 @@ import {
     EyeOff, 
     ArrowRight, 
     UserPlus,
-    ChevronRight
+    ChevronRight,
+    Loader2
 } from 'lucide-react';
 import './Login.css';
 
@@ -23,11 +24,13 @@ export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+        setIsLoading(true);
         try {
             const data = { email, password };
             const response = mode === 'login' 
@@ -44,6 +47,8 @@ export const Login = () => {
         } catch (err) {
             const message = err.response?.data?.message || 'Connection error. Please check if the server is running.';
             setError(message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -94,10 +99,11 @@ export const Login = () => {
 
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="input-field">
-                        <Mail className="field-icon" size={20} />
+                        <Mail className="field-icon" size={20} aria-hidden="true" />
                         <input
                             type="email"
                             placeholder="Email Address"
+                            aria-label="Email Address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -105,10 +111,11 @@ export const Login = () => {
                     </div>
                     
                     <div className="input-field">
-                        <Lock className="field-icon" size={20} />
+                        <Lock className="field-icon" size={20} aria-hidden="true" />
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
+                            aria-label="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -117,8 +124,10 @@ export const Login = () => {
                             type="button" 
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                            title={showPassword ? "Hide password" : "Show password"}
                         >
-                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            {showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
                         </button>
                     </div>
 
@@ -139,8 +148,18 @@ export const Login = () => {
 
                     {error && <div className="error-message">{error}</div>}
 
-                    <button type="submit" className="login-btn primary-gradient">
-                        {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} />
+                    <button
+                        type="submit"
+                        className="login-btn primary-gradient"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <Loader2 className="spinner" size={20} aria-hidden="true" />
+                        ) : (
+                            <>
+                                {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} aria-hidden="true" />
+                            </>
+                        )}
                     </button>
                 </form>
 
