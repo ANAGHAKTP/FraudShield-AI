@@ -9,4 +9,4 @@ import { PredictionModule } from '../modules/prediction.module';
   controllers: [TransactionsController],
   providers: [TransactionsService],
 })
-export class TransactionsModule { }
+export class TransactionsModule {}

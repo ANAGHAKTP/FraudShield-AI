@@ -3,8 +3,8 @@ import { PredictionController } from '../controllers/prediction.controller';
 import { PredictionService } from '../services/prediction.service';
 
 @Module({
-    controllers: [PredictionController],
-    providers: [PredictionService],
-    exports: [PredictionService],
+  controllers: [PredictionController],
+  providers: [PredictionService],
+  exports: [PredictionService],
 })
-export class PredictionModule { }
+export class PredictionModule {}
