@@ -43,22 +43,6 @@ export class AnalyticsService {
     };
   }
 
-  async getTransactionsCount(userId: number) {
-    const supabase = this.supabaseService.getClient();
-
-    const { count, error } = await supabase
-      .from('Transactions')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId);
-
-    if (error)
-      throw new InternalServerErrorException(
-        'Error fetching transaction count',
-      );
-
-    return { count: count || 0 };
-  }
-
   async getHighRiskTransactions(userId: number, limit: number = 5) {
     const supabase = this.supabaseService.getClient();
 
