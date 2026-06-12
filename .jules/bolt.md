@@ -9,3 +9,7 @@
 ## 2026-06-11 - [Redundant API Calls]
 **Learning:** The frontend made a separate API call (`/analytics/transactions-count`) to fetch the total transaction count, even though this exact data was already computed and returned by the `/analytics/fraud-rate` endpoint (`total_transactions`). This resulted in an unnecessary database query and network request during dashboard load.
 **Action:** Always check the payload of existing requests (especially aggregate/analytics endpoints) before creating or querying new endpoints for simple counts.
+
+## 2024-06-12 - [Redundant Scikit-Learn Inference]
+**Learning:** Calling both `model.predict(X)` and `model.predict_proba(X)` sequentially in an API endpoint doubles the computational cost for tree-based models like RandomForest. The `predict()` method internally computes probabilities (or scores) and then applies argmax.
+**Action:** Always call only `predict_proba()` (or `decision_function()`) and infer the final binary label manually using a simple threshold (e.g., `prob >= 0.5`) to cut inference time in half, especially for batch prediction endpoints.

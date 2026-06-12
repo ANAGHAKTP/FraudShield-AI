@@ -50,8 +50,8 @@ def predict(data: Transaction):
 
     df_features = pd.DataFrame([data.features], columns=features_list)
 
-    prediction = model.predict(df_features)[0]
-    probability = float(model.predict_proba(df_features)[0][1])
+    probs = model.predict_proba(df_features)[0]
+    probability = float(probs[1]) if len(probs) > 1 else 0.0
 
     if probability > 0.8:
         risk = "HIGH"
@@ -62,7 +62,7 @@ def predict(data: Transaction):
 
     return {
         "fraud_probability": probability,
-        "label": "fraud" if prediction == 1 else "legitimate",
+        "label": "fraud" if probability >= 0.5 else "legitimate",
         "risk_level": risk
     }
 
@@ -75,11 +75,11 @@ def predict_batch(data: BatchTransaction):
     features_list_of_lists = [t.features for t in data.transactions]
     df_features = pd.DataFrame(features_list_of_lists, columns=features_list)
 
-    predictions = model.predict(df_features)
-    probabilities = model.predict_proba(df_features)[:, 1]
+    probs_array = model.predict_proba(df_features)
+    probabilities = probs_array[:, 1] if probs_array.shape[1] > 1 else np.zeros(probs_array.shape[0])
 
     results = []
-    for pred, prob in zip(predictions, probabilities):
+    for prob in probabilities:
         prob = float(prob)
         if prob > 0.8:
             risk = "HIGH"
@@ -90,7 +90,7 @@ def predict_batch(data: BatchTransaction):
             
         results.append({
             "fraud_probability": prob,
-            "label": "fraud" if pred == 1 else "legitimate",
+            "label": "fraud" if prob >= 0.5 else "legitimate",
             "risk_level": risk
         })
         
