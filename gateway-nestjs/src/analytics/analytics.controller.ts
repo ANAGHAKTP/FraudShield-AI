@@ -12,11 +12,6 @@ export class AnalyticsController {
     return this.analyticsService.getFraudRate(req.user.userId);
   }
 
-  @Get('transactions-count')
-  async getTransactionsCount(@Request() req: any) {
-    return this.analyticsService.getTransactionsCount(req.user.userId);
-  }
-
   @Get('high-risk')
   async getHighRiskTransactions(@Request() req: any) {
     return this.analyticsService.getHighRiskTransactions(req.user.userId);
