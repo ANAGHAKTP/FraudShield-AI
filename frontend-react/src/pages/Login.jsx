@@ -12,7 +12,8 @@ import {
     EyeOff, 
     ArrowRight, 
     UserPlus,
-    ChevronRight
+    ChevronRight,
+    Loader2
 } from 'lucide-react';
 import './Login.css';
 
@@ -23,11 +24,13 @@ export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+        setIsLoading(true);
         try {
             const data = { email, password };
             const response = mode === 'login' 
@@ -44,6 +47,8 @@ export const Login = () => {
         } catch (err) {
             const message = err.response?.data?.message || 'Connection error. Please check if the server is running.';
             setError(message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -142,8 +147,22 @@ export const Login = () => {
 
                     {error && <div className="error-message">{error}</div>}
 
-                    <button type="submit" className="login-btn primary-gradient">
-                        {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} />
+                    <button
+                        type="submit"
+                        className="login-btn primary-gradient"
+                        disabled={isLoading}
+                        aria-disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="spinner-icon" size={20} aria-hidden="true" />
+                                {mode === 'login' ? 'Authenticating...' : 'Creating Account...'}
+                            </>
+                        ) : (
+                            <>
+                                {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} />
+                            </>
+                        )}
                     </button>
                 </form>
 
