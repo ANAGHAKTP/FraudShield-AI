@@ -208,8 +208,15 @@ export class TransactionsService {
       this.logger.error('Failed to bulk insert predictions', predError);
     }
 
-    // 5. Update transaction statuses based on risk concurrently
-    const updatePromises = txData.map((tx, i) => {
+    // 5. Update transaction statuses based on risk in bulk
+    // ⚡ Bolt Optimization: Replace O(N) single-row updates with O(1) bulk updates grouped by status
+    const statusGroups: Record<string, string[]> = {
+      APPROVED: [],
+      REVIEW: [],
+      DECLINED: [],
+    };
+
+    txData.forEach((tx, i) => {
       const pred = predictionResults[i];
       const finalStatus =
         pred.fraud_probability > 0.8
@@ -217,12 +224,15 @@ export class TransactionsService {
           : pred.fraud_probability > 0.4
             ? 'REVIEW'
             : 'APPROVED';
-
-      return supabase
-        .from('transactions')
-        .update({ status: finalStatus })
-        .eq('id', tx.id);
+      statusGroups[finalStatus].push(tx.id);
     });
+
+    const updatePromises = Object.entries(statusGroups)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .filter(([_unused, ids]) => ids.length > 0)
+      .map(([status, ids]) =>
+        supabase.from('transactions').update({ status }).in('id', ids),
+      );
 
     await Promise.all(updatePromises);
 
