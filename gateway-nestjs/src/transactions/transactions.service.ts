@@ -125,11 +125,12 @@ export class TransactionsService {
     const supabase = this.supabaseService.getClient();
 
     // 1. Bulk insert transactions
+    const currentIsoTime = new Date().toISOString();
     const txInserts = transactions.map((tx) => ({
       user_id: userId,
       amount: tx.amount,
       status: 'PENDING',
-      timestamp: new Date().toISOString(),
+      timestamp: currentIsoTime,
     }));
 
     const { data: txData, error: txError } = await supabase
@@ -209,7 +210,7 @@ export class TransactionsService {
     }
 
     // 5. Update transaction statuses based on risk concurrently
-    const updatePromises = txData.map((tx, i) => {
+    const upsertPayloads = txData.map((tx, i) => {
       const pred = predictionResults[i];
       const finalStatus =
         pred.fraud_probability > 0.8
@@ -218,13 +219,16 @@ export class TransactionsService {
             ? 'REVIEW'
             : 'APPROVED';
 
-      return supabase
-        .from('transactions')
-        .update({ status: finalStatus })
-        .eq('id', tx.id);
+      return {
+        id: tx.id,
+        user_id: tx.user_id,
+        amount: tx.amount,
+        timestamp: tx.timestamp,
+        status: finalStatus,
+      };
     });
 
-    await Promise.all(updatePromises);
+    await supabase.from('transactions').upsert(upsertPayloads);
 
     return {
       inserted_count: txData.length,
