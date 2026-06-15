@@ -252,13 +252,32 @@
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
 }
 
-.login-btn:hover {
+.login-btn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.5);
 }
 
-.login-btn:active {
+.login-btn:active:not(:disabled) {
     transform: translateY(0);
+}
+
+.login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Divider */
@@ -342,4 +361,4 @@
     font-size: 0.875rem;
     border-radius: 8px;
     text-align: center;
-}
+}
