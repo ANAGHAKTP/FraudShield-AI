@@ -208,21 +208,29 @@ export class TransactionsService {
       this.logger.error('Failed to bulk insert predictions', predError);
     }
 
-    // 5. Update transaction statuses based on risk concurrently
-    const updatePromises = txData.map((tx, i) => {
-      const pred = predictionResults[i];
+    // 5. Group and update transaction statuses based on risk (O(1) updates instead of O(N))
+    const statusGroups: Record<string, any[]> = {
+      DECLINED: [],
+      REVIEW: [],
+      APPROVED: [],
+    };
+
+    txData.forEach((tx, i) => {
+      const fraud_probability = predictionResults[i].fraud_probability;
       const finalStatus =
-        pred.fraud_probability > 0.8
+        fraud_probability > 0.8
           ? 'DECLINED'
-          : pred.fraud_probability > 0.4
+          : fraud_probability > 0.4
             ? 'REVIEW'
             : 'APPROVED';
-
-      return supabase
-        .from('transactions')
-        .update({ status: finalStatus })
-        .eq('id', tx.id);
+      statusGroups[finalStatus].push(tx.id);
     });
+
+    const updatePromises = Object.entries(statusGroups)
+      .filter(([_, ids]) => ids.length > 0)
+      .map(([status, ids]) =>
+        supabase.from('transactions').update({ status }).in('id', ids),
+      );
 
     await Promise.all(updatePromises);
 
