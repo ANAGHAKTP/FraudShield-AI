@@ -12,7 +12,8 @@ import {
     EyeOff, 
     ArrowRight, 
     UserPlus,
-    ChevronRight
+    ChevronRight,
+    Loader2
 } from 'lucide-react';
 import './Login.css';
 
@@ -23,11 +24,13 @@ export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+        setIsSubmitting(true);
         try {
             const data = { email, password };
             const response = mode === 'login' 
@@ -44,6 +47,8 @@ export const Login = () => {
         } catch (err) {
             const message = err.response?.data?.message || 'Connection error. Please check if the server is running.';
             setError(message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -120,6 +125,7 @@ export const Login = () => {
                             className="toggle-password"
                             aria-label={showPassword ? "Hide password" : "Show password"}
                             onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
                         >
                             {showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
                         </button>
@@ -142,8 +148,17 @@ export const Login = () => {
 
                     {error && <div className="error-message">{error}</div>}
 
-                    <button type="submit" className="login-btn primary-gradient">
-                        {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} />
+                    <button type="submit" className="login-btn primary-gradient" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 size={20} className="spinner" />
+                                {mode === 'login' ? 'Authenticating...' : 'Creating...'}
+                            </>
+                        ) : (
+                            <>
+                                {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} />
+                            </>
+                        )}
                     </button>
                 </form>
 

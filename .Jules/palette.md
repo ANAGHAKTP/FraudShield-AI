@@ -1,0 +1,3 @@
+## 2024-05-18 - Improve Login Accessibility and UX
+**Learning:** Found that icon-only buttons (like the password visibility toggle) and form inputs lacked `aria-label`s, making them less accessible to screen readers. Also observed that asynchronous form submissions lacked user feedback, which could lead to multiple submissions or user confusion.
+**Action:** Added `aria-label` attributes to the password visibility toggle button and inputs. Introduced an `isSubmitting` state to disable the submit button and display a loading spinner during API calls. I'll make sure to look for these patterns in future UX enhancement checks.
