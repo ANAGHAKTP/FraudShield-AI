@@ -13,3 +13,6 @@
 ## 2026-06-13 - [Concurrent DB Updates in Batch Processing]
 **Learning:** In the gateway-nestjs backend, sequential `await` loops for database updates (like updating statuses after batch predictions) cause an N+1 latency bottleneck where processing time scales linearly with batch size. The Supabase client supports concurrent operations efficiently.
 **Action:** Always replace sequential `await` calls inside loops with an array of mapped promises resolved via `Promise.all()` when independent database updates can be performed concurrently.
+## 2024-06-18 - Optimize Batch Transaction Status Updates
+**Learning:** Found an O(N) database update loop inside `transactions.service.ts` when handling batch transaction updates where each transaction triggered a separate query.
+**Action:** Always prefer grouped bulk updates (using `.in()` or `.upsert()`) over concurrent single-row updates (using `Promise.all()`) when hitting external databases like Supabase to reduce network requests from O(N) to O(1).
