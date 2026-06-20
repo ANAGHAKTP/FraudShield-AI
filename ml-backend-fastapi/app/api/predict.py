@@ -1,6 +1,9 @@
+import logging
 from fastapi import APIRouter, HTTPException
 from app.models.schemas import FraudPredictionRequest, FraudPredictionResponse
 from app.services.fraud_detection import predict_fraud
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/predict", tags=["prediction"])
 
@@ -13,4 +16,5 @@ def get_prediction(request: FraudPredictionRequest):
             probability=result["probability"]
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Prediction failed: {e}")
+        raise HTTPException(status_code=500, detail="An internal error occurred")
