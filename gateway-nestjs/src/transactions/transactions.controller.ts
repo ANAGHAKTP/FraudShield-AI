@@ -5,6 +5,7 @@ import {
   Body,
   UseGuards,
   Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -23,7 +24,7 @@ export class TransactionsController {
   @Post('batch')
   async createBatchTransactions(@Request() req: any, @Body() body: any[]) {
     if (!Array.isArray(body)) {
-      throw new Error(
+      throw new BadRequestException(
         'Payload must be an array of transactions for batch processing',
       );
     }
