@@ -13,4 +13,4 @@ def get_prediction(request: FraudPredictionRequest):
             probability=result["probability"]
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error during prediction")
