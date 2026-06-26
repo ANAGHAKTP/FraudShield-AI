@@ -50,7 +50,19 @@ export const TransactionTable = ({ transactions }) => {
 
                         return (
                             <React.Fragment key={tx.id}>
-                                <tr onClick={() => isFraud && setExpandedTx(isExpanded ? null : tx.id)} style={{ cursor: isFraud ? 'pointer' : 'default' }}>
+                                <tr
+                                    className={isFraud ? 'interactive-row' : ''}
+                                    onClick={() => isFraud && setExpandedTx(isExpanded ? null : tx.id)}
+                                    onKeyDown={(e) => {
+                                        if (isFraud && (e.key === 'Enter' || e.key === ' ')) {
+                                            e.preventDefault();
+                                            setExpandedTx(isExpanded ? null : tx.id);
+                                        }
+                                    }}
+                                    tabIndex={isFraud ? 0 : undefined}
+                                    aria-expanded={isFraud ? isExpanded : undefined}
+                                    style={{ cursor: isFraud ? 'pointer' : 'default' }}
+                                >
                                     <td>{formatDate(tx.timestamp)}</td>
                                     <td style={{ fontWeight: 500 }}>{tx.merchant}</td>
                                     <td>
