@@ -5,3 +5,7 @@
 ## 2026-06-14 - Added Loading State to Async Submit Button
 **Learning:** Found that submit buttons during async operations lacked loading states and feedback, which could lead to multiple submissions or user confusion. Also realized decorative loading spinners need `aria-hidden="true"` to prevent screen readers from reading meaningless structural changes.
 **Action:** Always add disabled state and visual loading indicators to submit buttons for async actions, ensuring the animated loading icon includes `aria-hidden="true"`.
+
+## 2026-06-27 - Keyboard Accessibility for Non-Interactive Elements
+**Learning:** Found that non-interactive HTML elements (like `<tr>`) with click handlers require additional attributes and event listeners to be fully accessible and usable via keyboard navigation.
+**Action:** When adding click interactions to non-interactive elements, ensure they are keyboard-accessible by providing `tabIndex="0"`, an `onKeyDown` event handler listening for 'Enter' and 'Space' keys, and a visual focus state (such as `:focus-visible` in CSS).
