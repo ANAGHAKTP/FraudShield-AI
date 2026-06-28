@@ -17,3 +17,6 @@
 ## 2024-06-13 - [Concurrent DB Updates in Batch Processing]
 **Learning:** In the gateway-nestjs backend, sequential `await` loops for database updates (like updating statuses after batch predictions) cause an N+1 latency bottleneck where processing time scales linearly with batch size. The Supabase client supports grouped operations efficiently via `.in()`.
 **Action:** Always replace concurrent `Promise.all()` single-row updates with grouped bulk updates (`.in()`) to reduce database and network load from O(N) to O(1) when updating rows with the same payload.
+## 2024-07-25 - [Implicit Intl Instantiation in loops]
+**Learning:** Calling `.toLocaleTimeString()` (or other `.toLocale*` methods) directly on a `Date` object implicitly instantiates a new `Intl` formatter object every time it's called. When used inside a `.map()` loop or component render method, this causes significant performance overhead and unnecessary garbage collection.
+**Action:** Always extract and cache `Intl.DateTimeFormat` or `Intl.NumberFormat` instances outside of React component render loops or mapping functions, and use `formatter.format()` instead of `.toLocale*` string methods.
