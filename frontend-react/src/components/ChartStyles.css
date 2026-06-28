@@ -120,6 +120,15 @@
     background: rgba(255, 255, 255, 0.02);
 }
 
+.data-table tr.clickable-row:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: -2px;
+}
+
+.data-table tr.clickable-row:focus-visible td {
+    background: rgba(59, 130, 246, 0.1);
+}
+
 .data-table tr:last-child td {
     border-bottom: none;
 }
