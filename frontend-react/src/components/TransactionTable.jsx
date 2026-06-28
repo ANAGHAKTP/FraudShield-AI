@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ChevronDown, Database } from 'lucide-react';
 import './ChartStyles.css';
 import { FraudExplanation } from './FraudExplanation';
 
@@ -74,10 +75,20 @@ export const TransactionTable = ({ transactions }) => {
                                             {prediction?.risk_level || 'N/A'}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'space-between' }}>
                                         <span className={`badge ${isFraud ? 'danger' : 'safe'}`}>
                                             {isFraud ? 'Threat Caught' : 'Safe Packet'}
                                         </span>
+                                        {isFraud && (
+                                            <ChevronDown
+                                                size={16}
+                                                color="#94a3b8"
+                                                style={{
+                                                    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                                    transition: 'transform 0.2s ease'
+                                                }}
+                                            />
+                                        )}
                                     </td>
                                 </tr>
                                 {isExpanded && prediction?.top_features && (
@@ -92,8 +103,14 @@ export const TransactionTable = ({ transactions }) => {
                     })}
                     {(!transactions || transactions.length === 0) && (
                         <tr>
-                            <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
-                                Awaiting incoming transactional payload streams.
+                            <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                                    <Database size={32} opacity={0.5} />
+                                    <div>
+                                        <p style={{ margin: 0, fontWeight: 500, color: '#94a3b8' }}>No Transactions Yet</p>
+                                        <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', opacity: 0.8 }}>Awaiting incoming transactional payload streams.</p>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     )}
