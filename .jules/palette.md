@@ -9,3 +9,6 @@
 ## 2026-06-27 - Keyboard Accessibility for Non-Interactive Elements
 **Learning:** Found that non-interactive HTML elements (like `<tr>`) with click handlers require additional attributes and event listeners to be fully accessible and usable via keyboard navigation.
 **Action:** When adding click interactions to non-interactive elements, ensure they are keyboard-accessible by providing `tabIndex="0"`, an `onKeyDown` event handler listening for 'Enter' and 'Space' keys, and a visual focus state (such as `:focus-visible` in CSS).
+## 2026-06-28 - Added visual affordances to expandable rows and improved empty states
+**Learning:** Interactive elements (like expandable table rows) require explicit visual affordances (like chevrons) to indicate interactivity, otherwise users might not realize they can click them. Furthermore, empty states should use muted icons and structured typography to feel intentional and guide the user, rather than looking like a missing component or broken data fetch.
+**Action:** Always provide explicit visual cues (e.g., icons that change state) for non-standard interactive elements, and design empty states intentionally with icons and clear messaging.
