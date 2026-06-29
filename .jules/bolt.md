@@ -17,3 +17,6 @@
 ## 2024-06-13 - [Concurrent DB Updates in Batch Processing]
 **Learning:** In the gateway-nestjs backend, sequential `await` loops for database updates (like updating statuses after batch predictions) cause an N+1 latency bottleneck where processing time scales linearly with batch size. The Supabase client supports grouped operations efficiently via `.in()`.
 **Action:** Always replace concurrent `Promise.all()` single-row updates with grouped bulk updates (`.in()`) to reduce database and network load from O(N) to O(1) when updating rows with the same payload.
+## 2024-06-29 - [Expensive Date Formatting in React Render Loops]
+**Learning:** Implicitly instantiating `Intl` formatters (like via `.toLocaleTimeString()`) inside map loops during renders is a significant performance bottleneck, especially for frequently updating lists (like `AlertPanel.jsx`).
+**Action:** Always cache `Intl.DateTimeFormat` or `Intl.NumberFormat` instances outside the component or loop, and use their `.format()` methods inside to prevent unnecessary allocations on every render.

@@ -3,6 +3,14 @@ import { AlertTriangle } from 'lucide-react';
 import { api } from '../services/api';
 import './AlertPanel.css';
 
+// ⚡ Bolt Optimization: Cache Intl.DateTimeFormat instance outside the component
+// to prevent expensive re-instantiations on every render and loop iteration.
+const timeFormatter = new Intl.DateTimeFormat(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+});
+
 export const AlertPanel = () => {
     const [alerts, setAlerts] = useState([]);
 
@@ -35,7 +43,7 @@ export const AlertPanel = () => {
                     <div key={index} className="alert-item">
                         <span className="alert-tx">Transaction {alert.transaction_id}</span>
                         <span className="alert-prob">flagged ({Number(alert.probability).toFixed(2)})</span>
-                        <span className="alert-time">{new Date(alert.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+                        <span className="alert-time">{timeFormatter.format(new Date(alert.created_at))}</span>
                     </div>
                 ))}
             </div>
