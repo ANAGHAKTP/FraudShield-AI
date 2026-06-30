@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ChevronDown, ChevronRight, Inbox } from "lucide-react";
 import './ChartStyles.css';
 import { FraudExplanation } from './FraudExplanation';
 
@@ -74,10 +75,15 @@ export const TransactionTable = ({ transactions }) => {
                                             {prediction?.risk_level || 'N/A'}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <span className={`badge ${isFraud ? 'danger' : 'safe'}`}>
                                             {isFraud ? 'Threat Caught' : 'Safe Packet'}
                                         </span>
+                                        {isFraud && (
+                                            <span style={{ color: '#94a3b8', display: 'flex', alignItems: 'center' }}>
+                                                {isExpanded ? <ChevronDown size={18} aria-hidden="true" /> : <ChevronRight size={18} aria-hidden="true" />}
+                                            </span>
+                                        )}
                                     </td>
                                 </tr>
                                 {isExpanded && prediction?.top_features && (
@@ -92,8 +98,12 @@ export const TransactionTable = ({ transactions }) => {
                     })}
                     {(!transactions || transactions.length === 0) && (
                         <tr>
-                            <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
-                                Awaiting incoming transactional payload streams.
+                            <td colSpan="6">
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem', color: '#64748b', textAlign: 'center' }}>
+                                    <Inbox size={48} style={{ color: '#475569', marginBottom: '1rem', opacity: 0.5 }} aria-hidden="true" />
+                                    <h4 style={{ margin: '0 0 0.5rem 0', color: '#94a3b8', fontSize: '1rem', fontWeight: 500 }}>No Transactions Found</h4>
+                                    <p style={{ margin: 0, fontSize: '0.875rem' }}>Awaiting incoming transactional payload streams.</p>
+                                </div>
                             </td>
                         </tr>
                     )}
