@@ -10,3 +10,7 @@
 **Vulnerability:** The API Gateway `AuthController` was accepting raw `any` payloads for login and registration requests without any validation, opening up the risk for missing data, poorly formatted emails, and overly weak passwords.
 **Learning:** Using raw `any` or basic TS interfaces bypasses input checking in NestJS.
 **Prevention:** Always define incoming request bodies using explicitly typed DTO classes and decorate properties with `class-validator` rules. Further, ensure `ValidationPipe` with `whitelist: true` is enabled globally to strip out unknown fields and prevent mass assignment attacks.
+## 2025-02-15 - [HIGH] Add Input Validation and DTOs to Application endpoints
+**Vulnerability:** The API Gateway `TransactionsController` and `PredictionController` were accepting raw `any` payloads for transaction creation and prediction requests without validation, enabling potential injection of malicious, malformed payloads and mass assignment.
+**Learning:** Using raw `any` types for HTTP payloads in NestJS completely bypasses validation, removing a key defense-in-depth layer.
+**Prevention:** Always define incoming request bodies using explicitly typed DTO classes, and decorate properties with `class-validator` rules to enforce strict typing and validation at the network boundary.
