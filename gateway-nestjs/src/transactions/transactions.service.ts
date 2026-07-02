@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { SupabaseService } from '../supabase.service';
 import { PredictionService } from '../services/prediction.service';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -15,7 +16,10 @@ export class TransactionsService {
     private readonly predictionService: PredictionService,
   ) {}
 
-  async processTransaction(userId: number, transactionDto: any) {
+  async processTransaction(
+    userId: number,
+    transactionDto: CreateTransactionDto,
+  ) {
     const supabase = this.supabaseService.getClient();
 
     // 1. Store transaction in Supabase
@@ -121,7 +125,10 @@ export class TransactionsService {
     };
   }
 
-  async processBatchTransactions(userId: number, transactions: any[]) {
+  async processBatchTransactions(
+    userId: number,
+    transactions: CreateTransactionDto[],
+  ) {
     const supabase = this.supabaseService.getClient();
 
     // 1. Bulk insert transactions
