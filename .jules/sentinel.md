@@ -10,3 +10,7 @@
 **Vulnerability:** The API Gateway `AuthController` was accepting raw `any` payloads for login and registration requests without any validation, opening up the risk for missing data, poorly formatted emails, and overly weak passwords.
 **Learning:** Using raw `any` or basic TS interfaces bypasses input checking in NestJS.
 **Prevention:** Always define incoming request bodies using explicitly typed DTO classes and decorate properties with `class-validator` rules. Further, ensure `ValidationPipe` with `whitelist: true` is enabled globally to strip out unknown fields and prevent mass assignment attacks.
+## 2024-07-03 - [MEDIUM] Secure Array Payload Validation
+**Vulnerability:** The NestJS Gateway application was accepting array payloads in the batch transactions endpoint using `any[]`. While global validation was enabled, it only validates top-level objects, allowing arrays of objects to completely bypass input validation and mass assignment protections.
+**Learning:** Global `ValidationPipe` in NestJS does not automatically iterate over arrays in `@Body()`. Without explicit array validation, nested objects escape all class-validator checks.
+**Prevention:** Always use `new ParseArrayPipe({ items: YourDtoClass, whitelist: true })` within the `@Body()` decorator when expecting an array payload to ensure validation rules and mass assignment protections are applied to every element in the array.
