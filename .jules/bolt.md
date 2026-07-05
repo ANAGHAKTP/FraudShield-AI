@@ -20,3 +20,7 @@
 ## 2024-06-29 - [Expensive Date Formatting in React Render Loops]
 **Learning:** Implicitly instantiating `Intl` formatters (like via `.toLocaleTimeString()`) inside map loops during renders is a significant performance bottleneck, especially for frequently updating lists (like `AlertPanel.jsx`).
 **Action:** Always cache `Intl.DateTimeFormat` or `Intl.NumberFormat` instances outside the component or loop, and use their `.format()` methods inside to prevent unnecessary allocations on every render.
+
+## 2025-07-05 - Redundant predict and predict_proba calls
+**Learning:** scikit-learn models (and typical ML frameworks) compute identical internal pathways for `predict()` and `predict_proba()`. Calling both sequentially for single or batched evaluations essentially doubles the inference execution time. The `predict()` response is essentially derived by thresholding the output of `predict_proba()` internally for binary classifiers.
+**Action:** When a probability is needed for granular risk bucketing, always only execute `predict_proba()`, retrieve the probability, and manually derive the prediction boundary (e.g. `1 if prob >= 0.5 else 0`) rather than calling both methods sequentially.
