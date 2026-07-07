@@ -30,12 +30,16 @@ def predict_fraud(features: list) -> dict:
         raise Exception("Model could not be loaded")
         
     df_features = pd.DataFrame([features], columns=features_list)
-    prediction = model.predict(df_features)[0]
     
-    # Optional: get probability if supported by model
+    # ⚡ Bolt Optimization: Compute probabilities once and derive class prediction to avoid redundant evaluations
+    # Also handles dummy model edge case where predict_proba returns shape (1, 1)
     probability = 0.0
     if hasattr(model, "predict_proba"):
-        probability = float(model.predict_proba(df_features)[0][1])
+        probs = model.predict_proba(df_features)
+        probability = float(probs[0][1]) if probs.shape[1] > 1 else 0.0
+        prediction = 1 if probability >= 0.5 else 0
+    else:
+        prediction = int(model.predict(df_features)[0])
         
     # Calculate SHAP values
     # We must transform the DataFrame into scaled features first before giving it to SHAP explainer
