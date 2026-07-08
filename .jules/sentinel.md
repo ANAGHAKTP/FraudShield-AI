@@ -10,3 +10,8 @@
 **Vulnerability:** The API Gateway `AuthController` was accepting raw `any` payloads for login and registration requests without any validation, opening up the risk for missing data, poorly formatted emails, and overly weak passwords.
 **Learning:** Using raw `any` or basic TS interfaces bypasses input checking in NestJS.
 **Prevention:** Always define incoming request bodies using explicitly typed DTO classes and decorate properties with `class-validator` rules. Further, ensure `ValidationPipe` with `whitelist: true` is enabled globally to strip out unknown fields and prevent mass assignment attacks.
+
+## 2026-07-08 - [Missing Input Validation on ML Prediction Endpoint]
+**Vulnerability:** The `/predict` endpoint in `PredictionController` was accepting a raw `any` payload and blindly passing `body.features` to the ML service without validation. This allowed malformed data (like missing features or non-array types) to crash the underlying prediction service.
+**Learning:** Relying on frontend validation or assuming well-formed JSON is insecure. Even internal or ML-facing endpoints need strict input validation at the gateway layer.
+**Prevention:** Always define DTOs (e.g., `PredictionDto`) for all incoming requests, using decorators like `@IsArray()` and `@IsNumber({}, { each: true })` to enforce strict type checking and data constraints before passing payloads to downstream services.

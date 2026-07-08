@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { PredictionService } from '../services/prediction.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { PredictionDto } from './dto/prediction.dto';
 
 @Controller('predict')
 export class PredictionController {
@@ -14,7 +15,7 @@ export class PredictionController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async predict(@Body() body: any) {
+  async predict(@Body() body: PredictionDto) {
     try {
       return await this.predictionService.predictFraud(body.features);
     } catch (error) {
