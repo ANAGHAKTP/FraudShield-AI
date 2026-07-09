@@ -145,7 +145,7 @@ export const Login = () => {
                         </div>
                     )}
 
-                    {error && <div className="error-message">{error}</div>}
+                    {error && <div className="error-message" role="alert" aria-live="assertive">{error}</div>}
 
                     <button type="submit" className="login-btn primary-gradient" disabled={isLoading}>
                         {isLoading ? (
