@@ -15,7 +15,7 @@ export class TransactionsService {
     private readonly predictionService: PredictionService,
   ) {}
 
-  async processTransaction(userId: number, transactionDto: any) {
+  async processTransaction(userId: number, transactionDto: { amount: number }) {
     const supabase = this.supabaseService.getClient();
 
     // 1. Store transaction in Supabase

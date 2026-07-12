@@ -6,9 +6,11 @@ import {
   UseGuards,
   Request,
   BadRequestException,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { TransactionDto } from './dto/transaction.dto';
 
 @Controller('transactions')
 @UseGuards(JwtAuthGuard)
@@ -16,13 +18,17 @@ export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Post()
-  async createTransaction(@Request() req: any, @Body() body: any) {
+  async createTransaction(@Request() req: any, @Body() body: TransactionDto) {
     // req.user is populated natively by the JWT strategy validate() method
     return this.transactionsService.processTransaction(req.user.userId, body);
   }
 
   @Post('batch')
-  async createBatchTransactions(@Request() req: any, @Body() body: any[]) {
+  async createBatchTransactions(
+    @Request() req: any,
+    @Body(new ParseArrayPipe({ items: TransactionDto, whitelist: true }))
+    body: TransactionDto[],
+  ) {
     if (!Array.isArray(body)) {
       throw new BadRequestException(
         'Payload must be an array of transactions for batch processing',
