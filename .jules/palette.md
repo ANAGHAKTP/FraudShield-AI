@@ -12,3 +12,7 @@
 ## 2024-06-29 - Empty States & Visual Affordances
 **Learning:** Tables with conditionally interactive rows (e.g., expandable only on fraud) cause confusion if there is no visual cue distinguishing them from static rows. Plain text empty states in complex dashboards look broken or unfinished.
 **Action:** Always add interactive icons (like chevrons) to expandable rows and design empty states with structured layout and muted iconography to provide visual polish.
+
+## 2024-07-01 - Dynamic Content Accessibility
+**Learning:** Found that dynamic alerts (like form errors or high-risk transaction popups) and loading screens were missing `role="alert"` or `role="status"`, meaning screen reader users were not proactively informed of state changes or errors. Also noted that animated spinners associated with these states lack `aria-hidden="true"`, causing screen readers to misinterpret them.
+**Action:** Always add `role="alert"` (or `aria-live="assertive"`) to dynamic error messages and popups, and `role="status"` (or `aria-live="polite"`) to loading states. Ensure any decorative icons or spinners within these states include `aria-hidden="true"`.

@@ -84,8 +84,8 @@ export const Dashboard = () => {
 
     if (loading) {
         return (
-            <div className="loading-screen">
-                <Loader2 className="spinner" size={48} />
+            <div className="loading-screen" role="status" aria-live="polite">
+                <Loader2 className="spinner" size={48} aria-hidden="true" />
                 <p>Loading Intelligence Matrix...</p>
             </div>
         );
