@@ -10,3 +10,8 @@
 **Vulnerability:** The API Gateway `AuthController` was accepting raw `any` payloads for login and registration requests without any validation, opening up the risk for missing data, poorly formatted emails, and overly weak passwords.
 **Learning:** Using raw `any` or basic TS interfaces bypasses input checking in NestJS.
 **Prevention:** Always define incoming request bodies using explicitly typed DTO classes and decorate properties with `class-validator` rules. Further, ensure `ValidationPipe` with `whitelist: true` is enabled globally to strip out unknown fields and prevent mass assignment attacks.
+
+## 2025-02-09 - Fix Missing Input Validation on Batch Array Processing
+**Vulnerability:** The batch processing endpoint (`/transactions/batch`) accepted a payload typed generically as an array without iterating inside to validate the actual content or fields, opening the door for mass assignment or malformed data attacks.
+**Learning:** Checking `Array.isArray()` is insufficient for security; it just checks the shell, not the contents.
+**Prevention:** In NestJS, when handling array payloads containing objects, use `new ParseArrayPipe({ items: YourDtoClass, whitelist: true })` inside the `@Body()` decorator to enforce strict DTO validation recursively on each array element.
