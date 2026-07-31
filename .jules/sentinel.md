@@ -10,3 +10,7 @@
 **Vulnerability:** The API Gateway `AuthController` was accepting raw `any` payloads for login and registration requests without any validation, opening up the risk for missing data, poorly formatted emails, and overly weak passwords.
 **Learning:** Using raw `any` or basic TS interfaces bypasses input checking in NestJS.
 **Prevention:** Always define incoming request bodies using explicitly typed DTO classes and decorate properties with `class-validator` rules. Further, ensure `ValidationPipe` with `whitelist: true` is enabled globally to strip out unknown fields and prevent mass assignment attacks.
+## 2024-05-24 - [MEDIUM] Require ValidationPipe for Controller Actions
+**Vulnerability:** Even if `class-validator` decorators and DTOs are defined, NestJS does not magically trigger validation without an explicitly bound `ValidationPipe`. If the global `app.useGlobalPipes(new ValidationPipe())` is missing or bypassed, endpoints will remain vulnerable to malicious input, creating 'security theater'.
+**Learning:** Always ensure `ValidationPipe` is bound globally in `main.ts` and explicitly enforced on critical single/batch body endpoints via `@Body(new ValidationPipe(...))` when introducing validation to a codebase.
+**Prevention:** Apply `ValidationPipe` (and `ParseArrayPipe` for batches) with `whitelist: true` directly on request decorators or globally when defining input DTOs to guarantee execution.
