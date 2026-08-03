@@ -1,0 +1,3 @@
+## 2024-08-03 - Accessible Button Loading States and Error Announcements
+**Learning:** In the Login component, replacing button text entirely with a loading spinner stripped the accessible name from the button while it was in a loading state, breaking the experience for screen readers. Additionally, dynamically injected error messages were not being proactively announced.
+**Action:** When implementing dynamic UI loading states, always maintain the descriptive text alongside the decorative spinner (with `aria-hidden="true"`) and use `aria-busy="true"` on the container to reliably communicate state. Always use `role="alert"` (or `aria-live`) for dynamic form validation or API error messages so they are proactively announced by screen readers.
