@@ -349,3 +349,8 @@
     cursor: not-allowed;
     box-shadow: none;
 }
+
+.login-btn .spinner {
+    margin-right: 0.5rem;
+    color: inherit;
+}
