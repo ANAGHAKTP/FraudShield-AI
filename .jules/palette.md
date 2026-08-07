@@ -12,3 +12,6 @@
 ## 2024-06-29 - Empty States & Visual Affordances
 **Learning:** Tables with conditionally interactive rows (e.g., expandable only on fraud) cause confusion if there is no visual cue distinguishing them from static rows. Plain text empty states in complex dashboards look broken or unfinished.
 **Action:** Always add interactive icons (like chevrons) to expandable rows and design empty states with structured layout and muted iconography to provide visual polish.
+## 2026-06-15 - ARIA Live Regions for Dynamic Alerts
+**Learning:** Found that dynamically injected error messages on login and new transaction alerts on the dashboard were visually apparent but silent to assistive technologies because they lacked appropriate `aria-live` or `role="alert"` attributes. I also realized that dynamically hiding decorative icons with `aria-hidden="true"` inside of alert panels is necessary so screen readers don't make redundant announcements.
+**Action:** Always use `role="alert"` or `aria-live="assertive"` for dynamic form validations, API error messages, or real-time system alerts injected into the DOM, and apply `aria-hidden="true"` to any purely decorative elements within those containers.
