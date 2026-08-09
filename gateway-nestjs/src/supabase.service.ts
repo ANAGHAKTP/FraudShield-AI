@@ -8,14 +8,14 @@ export class SupabaseService {
 
   constructor() {
     // Determine connection based on environment variables.
-    // Fallback to empty string preventing complete crash if env is missing, but will throw on query.
-    const supabaseUrl = process.env.SUPABASE_URL || '';
-    const supabaseKey = process.env.SUPABASE_KEY || '';
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      this.logger.warn(
-        'Supabase URL or Key is missing from environment variables. Database operations will fail.',
-      );
+      const errorMsg =
+        'CRITICAL SECURITY: Supabase URL or Key is missing from environment variables.';
+      this.logger.error(errorMsg);
+      throw new Error(errorMsg);
     }
 
     this.supabase = createClient(supabaseUrl, supabaseKey);
