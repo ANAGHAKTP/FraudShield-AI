@@ -50,8 +50,19 @@ def predict(data: Transaction):
 
     df_features = pd.DataFrame([data.features], columns=features_list)
 
-    prediction = model.predict(df_features)[0]
-    probability = float(model.predict_proba(df_features)[0][1])
+    probs = model.predict_proba(df_features)
+    try:
+        prediction = int(model.classes_[np.argmax(probs, axis=1)][0])
+        try:
+            probability = float(probs[0][1])
+        except IndexError:
+            probability = 0.0
+    except AttributeError:
+        prediction = int(model.predict(df_features)[0])
+        try:
+            probability = float(probs[0][1])
+        except IndexError:
+            probability = 0.0
 
     if probability > 0.8:
         risk = "HIGH"
@@ -75,8 +86,19 @@ def predict_batch(data: BatchTransaction):
     features_list_of_lists = [t.features for t in data.transactions]
     df_features = pd.DataFrame(features_list_of_lists, columns=features_list)
 
-    predictions = model.predict(df_features)
-    probabilities = model.predict_proba(df_features)[:, 1]
+    probs = model.predict_proba(df_features)
+    try:
+        predictions = model.classes_[np.argmax(probs, axis=1)]
+        try:
+            probabilities = probs[:, 1]
+        except IndexError:
+            probabilities = [0.0] * len(predictions)
+    except AttributeError:
+        predictions = model.predict(df_features)
+        try:
+            probabilities = probs[:, 1]
+        except IndexError:
+            probabilities = [0.0] * len(predictions)
 
     results = []
     for pred, prob in zip(predictions, probabilities):

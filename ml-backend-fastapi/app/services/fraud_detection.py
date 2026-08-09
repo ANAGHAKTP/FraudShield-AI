@@ -2,6 +2,7 @@ import joblib
 import pandas as pd
 import os
 import shap
+import numpy as np
 
 # Assuming model is in app/models/fraud_model.pkl
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'models', 'fraud_model.pkl')
@@ -30,12 +31,27 @@ def predict_fraud(features: list) -> dict:
         raise Exception("Model could not be loaded")
         
     df_features = pd.DataFrame([features], columns=features_list)
-    prediction = model.predict(df_features)[0]
     
     # Optional: get probability if supported by model
     probability = 0.0
     if hasattr(model, "predict_proba"):
-        probability = float(model.predict_proba(df_features)[0][1])
+        probs = model.predict_proba(df_features)
+        try:
+            prediction = int(model.classes_[np.argmax(probs, axis=1)][0])
+            try:
+                probability = float(probs[0][1])
+            except IndexError:
+                # Fallback for dummy model that only returns one class
+                probability = 0.0
+        except AttributeError:
+            # Fallback if classes_ is missing
+            prediction = int(model.predict(df_features)[0])
+            try:
+                probability = float(probs[0][1])
+            except IndexError:
+                probability = 0.0
+    else:
+        prediction = int(model.predict(df_features)[0])
         
     # Calculate SHAP values
     # We must transform the DataFrame into scaled features first before giving it to SHAP explainer
