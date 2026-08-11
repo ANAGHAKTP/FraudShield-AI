@@ -15,3 +15,7 @@
 **Vulnerability:** The API Gateway `TransactionsController` and `PredictionController` were accepting raw `any` payloads for transaction creation and fraud prediction endpoints without any validation, opening up the risk for malformed data and bypassing business logic checks (like negative amounts).
 **Learning:** Using raw `any` types for request bodies bypasses NestJS's global `ValidationPipe` and input checking.
 **Prevention:** Always define incoming request bodies using explicitly typed DTO classes decorated with `class-validator` rules, and use `ParseArrayPipe` for validating arrays of objects to ensure robust input validation and prevent mass assignment attacks.
+## 2024-10-24 - [CRITICAL] Fix insecure fallback for critical environment variables
+**Vulnerability:** The application used empty strings as fallbacks for `SUPABASE_URL` and `SUPABASE_KEY` when environment variables were missing, proceeding with a warning instead of failing.
+**Learning:** Using insecure default fallbacks for critical infrastructure keys can lead to the application running in an invalid or vulnerable state.
+**Prevention:** Always validate the presence of critical environment variables during application initialization and explicitly throw an error to fail securely if they are missing.
