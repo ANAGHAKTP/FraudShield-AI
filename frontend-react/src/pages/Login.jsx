@@ -147,14 +147,10 @@ export const Login = () => {
 
                     {error && <div className="error-message">{error}</div>}
 
-                    <button type="submit" className="login-btn primary-gradient" disabled={isLoading}>
-                        {isLoading ? (
-                            <Loader2 className="spinner" size={20} aria-hidden="true" />
-                        ) : (
-                            <>
-                                {mode === 'login' ? 'Access Dashboard' : 'Create Account'} <ArrowRight size={20} aria-hidden="true" />
-                            </>
-                        )}
+                    <button type="submit" className="login-btn primary-gradient" disabled={isLoading} aria-busy={isLoading}>
+                        {isLoading && <Loader2 className="spinner" size={20} aria-hidden="true" style={{ marginRight: '0.5rem', color: 'inherit' }} />}
+                        {mode === 'login' ? 'Access Dashboard' : 'Create Account'}
+                        {!isLoading && <ArrowRight size={20} aria-hidden="true" style={{ marginLeft: '0.5rem' }} />}
                     </button>
                 </form>
 
