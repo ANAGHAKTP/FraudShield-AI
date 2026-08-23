@@ -33,7 +33,7 @@ export const AlertPanel = () => {
     if (alerts.length === 0) return null;
 
     return (
-        <div className="alert-panel-container">
+        <div className="alert-panel-container" role="alert" aria-live="assertive">
             <div className="alert-header">
                 <AlertTriangle className="alert-icon pulse" size={24} />
                 <h3>⚠ High Risk Transaction Detected</h3>
