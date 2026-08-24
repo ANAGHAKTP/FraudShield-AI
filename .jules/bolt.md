@@ -20,3 +20,7 @@
 ## 2024-06-29 - [Expensive Date Formatting in React Render Loops]
 **Learning:** Implicitly instantiating `Intl` formatters (like via `.toLocaleTimeString()`) inside map loops during renders is a significant performance bottleneck, especially for frequently updating lists (like `AlertPanel.jsx`).
 **Action:** Always cache `Intl.DateTimeFormat` or `Intl.NumberFormat` instances outside the component or loop, and use their `.format()` methods inside to prevent unnecessary allocations on every render.
+
+## 2024-06-30 - [Concurrent DB Reads]
+**Learning:** In the gateway-nestjs backend, executing independent database queries (like Supabase select counts) sequentially introduces unnecessary network roundtrip latency. The `getFraudRate` endpoint spent double the time waiting for counts to resolve sequentially.
+**Action:** Always use `Promise.all()` to execute independent database reads concurrently rather than sequentially to minimize network overhead.
