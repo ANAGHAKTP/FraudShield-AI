@@ -12,3 +12,6 @@
 ## 2024-06-29 - Empty States & Visual Affordances
 **Learning:** Tables with conditionally interactive rows (e.g., expandable only on fraud) cause confusion if there is no visual cue distinguishing them from static rows. Plain text empty states in complex dashboards look broken or unfinished.
 **Action:** Always add interactive icons (like chevrons) to expandable rows and design empty states with structured layout and muted iconography to provide visual polish.
+## 2024-07-01 - Accessible Critical Alerts
+**Learning:** Found that dynamically rendered critical UI alerts (like high-risk notifications) lacked `role="alert"` and `aria-live="assertive"`, causing screen readers to miss them upon mounting. Also, purely decorative icons within these alerts needed `aria-hidden="true"` to prevent screen readers from reading meaningless structural changes.
+**Action:** Always include `role="alert"` and `aria-live="assertive"` on container elements of dynamically rendered critical alerts, and explicitly add `aria-hidden="true"` to decorative elements like SVG icons within the container.
