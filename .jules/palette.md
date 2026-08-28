@@ -12,3 +12,6 @@
 ## 2024-06-29 - Empty States & Visual Affordances
 **Learning:** Tables with conditionally interactive rows (e.g., expandable only on fraud) cause confusion if there is no visual cue distinguishing them from static rows. Plain text empty states in complex dashboards look broken or unfinished.
 **Action:** Always add interactive icons (like chevrons) to expandable rows and design empty states with structured layout and muted iconography to provide visual polish.
+## 2024-07-28 - Button Accessible Names During Loading
+**Learning:** Replacing submit button text entirely with a loading spinner removes the button's accessible name, confusing screen reader users.
+**Action:** When adding loading states, always maintain the descriptive text alongside the spinner, use `aria-hidden="true"` on the spinner with proper visual spacing (`margin-right: 0.5rem`) and text color matching (`color: inherit`), and add `aria-busy="true"` to the button element.
