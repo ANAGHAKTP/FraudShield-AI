@@ -12,3 +12,6 @@
 ## 2024-06-29 - Empty States & Visual Affordances
 **Learning:** Tables with conditionally interactive rows (e.g., expandable only on fraud) cause confusion if there is no visual cue distinguishing them from static rows. Plain text empty states in complex dashboards look broken or unfinished.
 **Action:** Always add interactive icons (like chevrons) to expandable rows and design empty states with structured layout and muted iconography to provide visual polish.
+## 2024-07-28 - Kept Accessible Name During Loading
+**Learning:** Replaced the descriptive text of an async submit button entirely with a spinner removes the accessible name and causes context loss for screen readers. Error messages injected into the DOM also need 'role="alert"' to be announced.
+**Action:** Maintain the text alongside a decorative icon (with 'aria-hidden="true"') and add 'aria-busy="true"' to reliably communicate the state to screen readers. Add 'role="alert"' to dynamic error messages.
