@@ -50,8 +50,9 @@ def predict(data: Transaction):
 
     df_features = pd.DataFrame([data.features], columns=features_list)
 
-    prediction = model.predict(df_features)[0]
+    # ⚡ Bolt Optimization: Use predict_proba only and derive prediction to avoid redundant evaluation
     probability = float(model.predict_proba(df_features)[0][1])
+    prediction = 1 if probability >= 0.5 else 0
 
     if probability > 0.8:
         risk = "HIGH"
@@ -75,8 +76,9 @@ def predict_batch(data: BatchTransaction):
     features_list_of_lists = [t.features for t in data.transactions]
     df_features = pd.DataFrame(features_list_of_lists, columns=features_list)
 
-    predictions = model.predict(df_features)
+    # ⚡ Bolt Optimization: Use predict_proba only and derive prediction to avoid redundant evaluation
     probabilities = model.predict_proba(df_features)[:, 1]
+    predictions = (probabilities >= 0.5).astype(int)
 
     results = []
     for pred, prob in zip(predictions, probabilities):
