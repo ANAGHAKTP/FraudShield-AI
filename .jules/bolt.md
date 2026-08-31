@@ -20,3 +20,7 @@
 ## 2024-06-29 - [Expensive Date Formatting in React Render Loops]
 **Learning:** Implicitly instantiating `Intl` formatters (like via `.toLocaleTimeString()`) inside map loops during renders is a significant performance bottleneck, especially for frequently updating lists (like `AlertPanel.jsx`).
 **Action:** Always cache `Intl.DateTimeFormat` or `Intl.NumberFormat` instances outside the component or loop, and use their `.format()` methods inside to prevent unnecessary allocations on every render.
+
+## 2024-07-15 - [Redundant ML Model Evaluations]
+**Learning:** In the FastAPI ML backend, calling both `model.predict()` and `model.predict_proba()` sequentially causes scikit-learn models (like Random Forests) to perform identical feature evaluations twice, doubling the inference latency.
+**Action:** Always compute probabilities once using `predict_proba()` and safely derive binary class predictions using `model.classes_[np.argmax(probs, axis=1)]`. Provide robust `IndexError` fallbacks for dummy models trained on single classes.
