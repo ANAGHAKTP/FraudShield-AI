@@ -50,8 +50,17 @@ def predict(data: Transaction):
 
     df_features = pd.DataFrame([data.features], columns=features_list)
 
-    prediction = model.predict(df_features)[0]
-    probability = float(model.predict_proba(df_features)[0][1])
+    # ⚡ Bolt Optimization: Use predict_proba to compute both prediction and probability
+    # to avoid redundant sequential model evaluations which doubles inference time.
+    if hasattr(model, "predict_proba"):
+        probs = model.predict_proba(df_features)
+        probability = float(probs[0][1]) if probs.shape[1] > 1 else 0.0
+        # Safely derive prediction using the model's mapped classes
+        prediction = model.classes_[np.argmax(probs, axis=1)][0]
+    else:
+        prediction = model.predict(df_features)[0]
+        # Fallback to probability mapping based on prediction, preserving type safety
+        probability = 1.0 if prediction == 1 else 0.0
 
     if probability > 0.8:
         risk = "HIGH"
@@ -75,8 +84,17 @@ def predict_batch(data: BatchTransaction):
     features_list_of_lists = [t.features for t in data.transactions]
     df_features = pd.DataFrame(features_list_of_lists, columns=features_list)
 
-    predictions = model.predict(df_features)
-    probabilities = model.predict_proba(df_features)[:, 1]
+    # ⚡ Bolt Optimization: Use predict_proba to compute both predictions and probabilities
+    # to avoid redundant sequential model evaluations which doubles inference time.
+    if hasattr(model, "predict_proba"):
+        probs = model.predict_proba(df_features)
+        probabilities = probs[:, 1] if probs.shape[1] > 1 else np.zeros(len(probs))
+        # Safely derive prediction using the model's mapped classes
+        predictions = model.classes_[np.argmax(probs, axis=1)]
+    else:
+        predictions = model.predict(df_features)
+        # Fallback to probability mapping based on predictions, preserving type safety
+        probabilities = np.where(predictions == 1, 1.0, 0.0)
 
     results = []
     for pred, prob in zip(predictions, probabilities):
