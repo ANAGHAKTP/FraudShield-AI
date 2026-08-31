@@ -8,32 +8,32 @@ export class AnalyticsService {
   async getFraudRate(userId: number) {
     const supabase = this.supabaseService.getClient();
 
-    // 1. Fetch total transactions for user
-    const { count: totalCount, error: totalError } = await supabase
-      .from('Transactions')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId);
+    // ⚡ Bolt Optimization: Execute independent database count queries concurrently
+    // to reduce total network roundtrip latency by ~50%
+    const [totalResponse, fraudResponse] = await Promise.all([
+      supabase
+        .from('Transactions')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId),
+      supabase
+        .from('Transactions')
+        .select('Predictions!inner(*)', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('Predictions.label', 'fraud'),
+    ]);
 
-    if (totalError)
+    if (totalResponse.error)
       throw new InternalServerErrorException(
         'Error fetching total transactions',
       );
 
-    // 2. Fetch fraud predictions mapped to user transactions
-    // Since Predictions maps to Transactions via transaction_id, we join to filter by user.
-    const { count: fraudCount, error: fraudError } = await supabase
-      .from('Transactions')
-      .select('Predictions!inner(*)', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('Predictions.label', 'fraud');
-
-    if (fraudError)
+    if (fraudResponse.error)
       throw new InternalServerErrorException(
         'Error fetching fraud predictions',
       );
 
-    const total = totalCount || 0;
-    const fraud = fraudCount || 0;
+    const total = totalResponse.count || 0;
+    const fraud = fraudResponse.count || 0;
     const rate = total === 0 ? 0 : fraud / total;
 
     return {
