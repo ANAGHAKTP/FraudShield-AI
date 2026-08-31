@@ -1,4 +1,5 @@
 import joblib
+import numpy as np
 import pandas as pd
 import os
 import shap
@@ -30,12 +31,19 @@ def predict_fraud(features: list) -> dict:
         raise Exception("Model could not be loaded")
         
     df_features = pd.DataFrame([features], columns=features_list)
-    prediction = model.predict(df_features)[0]
-    
-    # Optional: get probability if supported by model
+    # ⚡ Bolt Optimization: Use predict_proba to compute probabilities and derive
+    # the class prediction in one pass to avoid redundant evaluations
     probability = 0.0
     if hasattr(model, "predict_proba"):
-        probability = float(model.predict_proba(df_features)[0][1])
+        probs = model.predict_proba(df_features)
+        if probs.shape[1] > 1:
+            probability = float(probs[0][1])
+            prediction = int(model.classes_[np.argmax(probs, axis=1)][0])
+        else:
+            probability = float(probs[0][0]) if model.classes_[0] == 1 else 0.0
+            prediction = int(model.classes_[0])
+    else:
+        prediction = int(model.predict(df_features)[0])
         
     # Calculate SHAP values
     # We must transform the DataFrame into scaled features first before giving it to SHAP explainer
