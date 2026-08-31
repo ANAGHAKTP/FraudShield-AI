@@ -12,3 +12,6 @@
 ## 2024-06-29 - Empty States & Visual Affordances
 **Learning:** Tables with conditionally interactive rows (e.g., expandable only on fraud) cause confusion if there is no visual cue distinguishing them from static rows. Plain text empty states in complex dashboards look broken or unfinished.
 **Action:** Always add interactive icons (like chevrons) to expandable rows and design empty states with structured layout and muted iconography to provide visual polish.
+## 2026-07-04 - Accessible Loading States and Error Alerts
+**Learning:** Found that dynamic error messages lacked `role="alert"` for screen reader announcements, and the submit button loading state replaced the descriptive text with a generic spinner without updating `aria-busy`. Additionally, `time.sleep()` in Playwright sync callbacks blocks the event loop.
+**Action:** Always add `role="alert"` to dynamically appearing error text. Ensure loading buttons retain descriptive text alongside spinners and update `aria-busy` state. Use threading for delays in Playwright sync callbacks.
