@@ -12,3 +12,6 @@
 ## 2024-06-29 - Empty States & Visual Affordances
 **Learning:** Tables with conditionally interactive rows (e.g., expandable only on fraud) cause confusion if there is no visual cue distinguishing them from static rows. Plain text empty states in complex dashboards look broken or unfinished.
 **Action:** Always add interactive icons (like chevrons) to expandable rows and design empty states with structured layout and muted iconography to provide visual polish.
+## 2026-06-30 - Screen Reader Announcements for Dynamic Errors
+**Learning:** Found that dynamic form validation and API error messages in React components were being visually injected into the DOM but missed `role="alert"`, causing them to be ignored by screen readers.
+**Action:** Always add `role="alert"` or `aria-live` attributes to dynamically rendered error containers to ensure they are proactively announced to users relying on assistive technologies.
